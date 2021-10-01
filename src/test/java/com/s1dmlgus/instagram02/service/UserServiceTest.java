@@ -10,7 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+
+
 @Transactional
 @SpringBootTest
 class UserServiceTest {
@@ -46,6 +47,19 @@ class UserServiceTest {
                 .email("dmlgus@gmail.com")
                 .name("이의현")
                 .build();
+    }
+
+    @DisplayName("비밀번호 암호화")
+    @Test
+    public void bcryptPwTest() throws Exception{
+        //given
+        User user = createUser();
+
+        //when
+        userService.bcryptPw(user);
+
+        //then
+        assertThat(user.getPassword()).isNotEqualTo("1234");
     }
 
 }
