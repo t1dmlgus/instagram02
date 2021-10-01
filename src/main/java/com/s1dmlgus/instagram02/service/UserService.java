@@ -1,5 +1,6 @@
 package com.s1dmlgus.instagram02.service;
 
+import com.s1dmlgus.instagram02.domain.user.Role;
 import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.domain.user.UserRepository;
 import com.s1dmlgus.instagram02.web.dto.JoinDto;
@@ -23,9 +24,13 @@ public class UserService {
 
         // 1. 중복확인
         duplicateUser(user);
-
         // 2. 암호화
         bcryptPw(user);
+        // 3. 권한 설정
+        user.setRole(Role.USER);
+
+        // 4. 영속화
+        userRepository.save(user);
     }
 
 

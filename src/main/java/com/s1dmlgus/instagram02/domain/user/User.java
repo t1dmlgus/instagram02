@@ -41,4 +41,8 @@ public class User{
     public void bcryptPw(String encode) {
         this.password = encode;
     }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 }

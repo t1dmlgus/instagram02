@@ -2,8 +2,12 @@ package com.s1dmlgus.instagram02.web.dto;
 
 
 import com.s1dmlgus.instagram02.domain.user.User;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class JoinDto {
 
