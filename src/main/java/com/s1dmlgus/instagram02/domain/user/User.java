@@ -36,4 +36,9 @@ public class User{
     @Enumerated(EnumType.STRING)
     private Role role;                  // 권한
 
+
+    // 비밀번호 암호화
+    public void bcryptPw(String encode) {
+        this.password = encode;
+    }
 }
