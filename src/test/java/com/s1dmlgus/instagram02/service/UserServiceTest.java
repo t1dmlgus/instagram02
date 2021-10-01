@@ -2,6 +2,7 @@ package com.s1dmlgus.instagram02.service;
 
 import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.domain.user.UserRepository;
+import com.s1dmlgus.instagram02.web.dto.JoinDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,9 +24,9 @@ class UserServiceTest {
     private UserService userService;
 
 
-    @DisplayName("닉네임 중복검사")
+    @DisplayName("닉네임 중복검사 테스트")
     @Test
-    public void duplicateUsernameTest() throws Exception{
+    public void duplicateUsernameTest() throws Exception {
         //given
 
         User user1 = createUser();
@@ -49,9 +50,9 @@ class UserServiceTest {
                 .build();
     }
 
-    @DisplayName("비밀번호 암호화")
+    @DisplayName("비밀번호 암호화 테슽")
     @Test
-    public void bcryptPwTest() throws Exception{
+    public void bcryptPwTest() throws Exception {
         //given
         User user = createUser();
 
@@ -61,5 +62,24 @@ class UserServiceTest {
         //then
         assertThat(user.getPassword()).isNotEqualTo("1234");
     }
+
+    @DisplayName("회원가입 테스트")
+    @Test
+    public void joinTest() throws Exception {
+        //given
+        JoinDto joinDto = new JoinDto("s1dmlgus", "1234", "dmlgus@gamil.com", "이의현");
+
+        //when
+        userService.join(joinDto);
+        User user = userRepository.findById(1L).get();
+
+        //then
+        assertThat(user.getUsername()).isEqualTo("s1dmlgus");
+
+    }
+
+
+
+
 
 }
