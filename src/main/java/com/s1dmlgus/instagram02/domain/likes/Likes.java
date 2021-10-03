@@ -1,4 +1,6 @@
 package com.s1dmlgus.instagram02.domain.likes;
 
-public class Likes {
+import com.s1dmlgus.instagram02.domain.BaseTimeEntity;
+
+public class Likes extends BaseTimeEntity {
 }

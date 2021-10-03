@@ -1,4 +1,6 @@
 package com.s1dmlgus.instagram02.domain.subscribe;
 
-public class Subscribe {
+import com.s1dmlgus.instagram02.domain.BaseTimeEntity;
+
+public class Subscribe extends BaseTimeEntity {
 }
