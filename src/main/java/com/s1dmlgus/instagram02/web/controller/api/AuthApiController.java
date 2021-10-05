@@ -12,7 +12,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +25,17 @@ public class AuthApiController {
 
 
     @PostMapping("/auth/signup")
-    public ResponseEntity<?> join(@RequestBody @Valid JoinDto joinDto) {
+    public ResponseEntity<?> join(@RequestBody @Valid JoinDto joinDto, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errorMap = new HashMap<>();
+
+            for (FieldError fieldError : bindingResult.getFieldErrors()) {
+                errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());
+            }
+            return new ResponseEntity<>(new ResponseDto<>("유효성 검사 실021패", errorMap), HttpStatus.BAD_REQUEST);
+
+        }
 
         ResponseDto<?> joinUser = userService.join(joinDto);
 
