@@ -1,4 +1,4 @@
-package com.s1dmlgus.instagram02.web.dto;
+package com.s1dmlgus.instagram02.web.dto.auth;
 
 
 import com.s1dmlgus.instagram02.domain.user.User;
@@ -27,7 +27,6 @@ public class JoinDto {
 
 
     public User toEntity(){
-
         return User.builder()
                 .username(username)
                 .password(password)

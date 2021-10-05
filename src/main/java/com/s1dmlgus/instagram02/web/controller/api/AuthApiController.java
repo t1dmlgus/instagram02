@@ -28,9 +28,9 @@ public class AuthApiController {
     @PostMapping("/auth/signup")
     public ResponseEntity<?> join(@RequestBody @Valid JoinDto joinDto) {
 
+        ResponseDto<?> joinUser = userService.join(joinDto);
 
-
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(joinUser, HttpStatus.OK);
 
     }
 

@@ -1,5 +1,7 @@
 package com.s1dmlgus.instagram02.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.s1dmlgus.instagram02.domain.BaseTimeEntity;
 import lombok.*;
 
@@ -17,13 +19,12 @@ public class User extends BaseTimeEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private String username;            // 닉네임
 
+    @JsonIgnore
     private String password;            // 패스워드
 
     private String email;               // 이메일
-
     private String name;                // 이름
 
     private String bio;                 // 자기소개
