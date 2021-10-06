@@ -34,7 +34,7 @@ class AuthApiControllerUnitTest {
 
     
     // BDDMockito 패턴
-    @DisplayName("회원가입 단위 테스트")
+    @DisplayName("회원가입 컨트롤러 단위 테스트")
     @Test
     public void joinTest() throws Exception {
 
