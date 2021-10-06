@@ -1,6 +1,7 @@
 package com.s1dmlgus.instagram02.web.controller.api;
 
 
+import com.s1dmlgus.instagram02.exception.CustomValidationException;
 import com.s1dmlgus.instagram02.service.UserService;
 import com.s1dmlgus.instagram02.web.dto.ResponseDto;
 import com.s1dmlgus.instagram02.web.dto.auth.JoinDto;
@@ -33,7 +34,8 @@ public class AuthApiController {
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
                 errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());
             }
-            return new ResponseEntity<>(new ResponseDto<>("유효성 검사 실021패", errorMap), HttpStatus.BAD_REQUEST);
+
+            throw new CustomValidationException("유효성 검사 실패", errorMap);
 
         }
 
