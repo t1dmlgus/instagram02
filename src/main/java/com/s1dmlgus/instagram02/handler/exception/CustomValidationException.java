@@ -1,4 +1,4 @@
-package com.s1dmlgus.instagram02.exception;
+package com.s1dmlgus.instagram02.handler.exception;
 
 import java.util.Map;
 

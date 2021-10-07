@@ -3,6 +3,7 @@ package com.s1dmlgus.instagram02.service;
 import com.s1dmlgus.instagram02.domain.user.Role;
 import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.domain.user.UserRepository;
+import com.s1dmlgus.instagram02.handler.exception.CustomException;
 import com.s1dmlgus.instagram02.web.dto.ResponseDto;
 import com.s1dmlgus.instagram02.web.dto.auth.JoinDto;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class UserService {
         // 2. 암호화
         bcryptPw(user);
         // 3. 권한 설정
+
         user.setRole(Role.USER);
 
         // 4. 영속화
@@ -49,7 +51,7 @@ public class UserService {
 
         boolean existsUsername = userRepository.existsByUsername(user.getUsername());
         if(existsUsername){
-            throw new RuntimeException("현재 사용중인 닉네임입니다.");
+            throw new CustomException("현재 사용중인 닉네임입니다.");
         }
     }
 }
