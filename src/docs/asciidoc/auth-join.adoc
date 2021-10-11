@@ -1,0 +1,32 @@
+ifndef::snippets[]
+:snippets: build/generated-snippets
+endif::[]
+
+= Spring REST Docs
+:toc: left
+:toclevels: 3
+:sectlinks:
+
+[[resources-user]]
+== 유저 API
+
+[[resources-user-create]]
+=== 회원가입 요청
+
+==== HTTP request
+
+include::{snippets}/auth-api-controller-integration-test/join-test/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/auth-api-controller-integration-test/join-test/http-response.adoc[]
+
+
+
+==== request-fields
+
+include::{snippets}/auth-api-controller-integration-test/join-test/request-fields.adoc[]
+
+==== response-fields
+
+include::{snippets}/auth-api-controller-integration-test/join-test/response-fields.adoc[]

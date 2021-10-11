@@ -1,20 +1,16 @@
 package com.s1dmlgus.instagram02.web.controller.api;
 
 
-import com.s1dmlgus.instagram02.handler.exception.CustomValidationException;
 import com.s1dmlgus.instagram02.service.UserService;
 import com.s1dmlgus.instagram02.web.dto.ResponseDto;
-import com.s1dmlgus.instagram02.web.dto.auth.JoinDto;
+import com.s1dmlgus.instagram02.web.dto.auth.JoinRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
 
 @RequiredArgsConstructor
@@ -26,9 +22,9 @@ public class AuthApiController {
 
 
     @PostMapping("/auth/signup")
-    public ResponseEntity<?> join(@Valid @RequestBody JoinDto joinDto, BindingResult bindingResult) {
+    public ResponseEntity<?> join(@Valid @RequestBody JoinRequestDto joinRequestDto, BindingResult bindingResult) {
 
-        ResponseDto<?> joinUser = userService.join(joinDto);
+        ResponseDto<?> joinUser = userService.join(joinRequestDto);
 
         return new ResponseEntity<>(joinUser, HttpStatus.OK);
     }

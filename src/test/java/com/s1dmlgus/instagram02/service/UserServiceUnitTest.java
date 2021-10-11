@@ -3,9 +3,8 @@ package com.s1dmlgus.instagram02.service;
 import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.domain.user.UserRepository;
 import com.s1dmlgus.instagram02.handler.exception.CustomException;
-import com.s1dmlgus.instagram02.handler.exception.CustomValidationException;
-import com.s1dmlgus.instagram02.web.dto.auth.JoinDto;
-import org.junit.jupiter.api.BeforeEach;
+import com.s1dmlgus.instagram02.web.dto.ResponseDto;
+import com.s1dmlgus.instagram02.web.dto.auth.JoinRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
@@ -68,32 +66,34 @@ class UserServiceUnitTest {
 
     }
 
-    @DisplayName("회원가입 단위 테스트")
+    @DisplayName("회원가입 테스트")
     @Test
     public void joinTest() throws Exception {
         //given
-        JoinDto joindto = createJoinDto();
+        JoinRequestDto joindto = createJoinDto();
         User user = joindto.toEntity();
 
         doReturn(user).when(userRepository).save(any(User.class));
 
         //when
-        userService.join(joindto);
+        ResponseDto<?> join = userService.join(joindto);
+
+        System.out.println("join = " + join);
 
         //then
-        assertThat(user.getUsername()).isEqualTo("s1dmlgus");
+        assertThat(join.getMessage()).isEqualTo("회원가입이 정상적으로 되었습니다.");
 
     }
 
-    private JoinDto createJoinDto() {
+    private JoinRequestDto createJoinDto() {
 
-        JoinDto joinDto1 = new JoinDto();
-        joinDto1.setUsername("s1dmlgus");
-        joinDto1.setPassword("1234");
-        joinDto1.setEmail("dmlgusgngl@gmail.com");
-        joinDto1.setName("dmlgus");
+        JoinRequestDto joinRequestDto1 = new JoinRequestDto();
+        joinRequestDto1.setUsername("s1dmlgus");
+        joinRequestDto1.setPassword("1234");
+        joinRequestDto1.setEmail("dmlgusgngl@gmail.com");
+        joinRequestDto1.setName("dmlgus");
 
-        return joinDto1;
+        return joinRequestDto1;
     }
 
     private User createUser() {

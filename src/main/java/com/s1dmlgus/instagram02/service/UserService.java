@@ -5,7 +5,7 @@ import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.domain.user.UserRepository;
 import com.s1dmlgus.instagram02.handler.exception.CustomException;
 import com.s1dmlgus.instagram02.web.dto.ResponseDto;
-import com.s1dmlgus.instagram02.web.dto.auth.JoinDto;
+import com.s1dmlgus.instagram02.web.dto.auth.JoinRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,9 +20,9 @@ public class UserService {
 
     // 회원가입
     @Transactional
-    public ResponseDto<?> join(JoinDto joinDto){
+    public ResponseDto<?> join(JoinRequestDto joinRequestDto){
 
-        User user = joinDto.toEntity();
+        User user = joinRequestDto.toEntity();
 
         // 1. 중복확인
         duplicateUser(user);
@@ -33,11 +33,11 @@ public class UserService {
         user.setRole(Role.USER);
 
         // 4. 영속화
-        userRepository.save(user);
+        User saveUser = userRepository.save(user);
 
 
         // user 엔티티를 dto 내에 넣어도 되는지, 아니면 ResponseUserDto를 만드는게 좋을지.,.
-        return new ResponseDto<>("회원가입이 정상적으로 되었습니다.", user);
+        return new ResponseDto<>("회원가입이 정상적으로 되었습니다.", saveUser.toDto());
     }
 
 

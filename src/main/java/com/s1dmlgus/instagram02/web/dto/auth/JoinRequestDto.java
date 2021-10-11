@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class JoinDto {
+public class JoinRequestDto {
 
     @NotBlank
     @Size(max = 20, message = "0에서 20자까지 작성할 수 있습니다")
