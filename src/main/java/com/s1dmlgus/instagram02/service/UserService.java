@@ -43,7 +43,7 @@ public class UserService {
 
     protected void bcryptPw(User user) {
 
-        String encode = bCryptPasswordEncoder.encode(user.getUsername());
+        String encode = bCryptPasswordEncoder.encode(user.getPassword());
         user.bcryptPw(encode);
     }
 

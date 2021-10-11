@@ -35,7 +35,7 @@ function join(evt) {
     }).done(res=>{
         console.log(res);
         alert(res.message);
-
+        location.href=`/`;
     }).fail(error=>{
         console.log(error.responseJSON);
 
