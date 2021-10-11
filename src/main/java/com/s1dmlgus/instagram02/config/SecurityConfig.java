@@ -9,9 +9,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-@RequiredArgsConstructor
-@EnableWebSecurity
+
 @Configuration
+@EnableWebSecurity(debug = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
@@ -19,11 +19,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http.csrf().disable();
-
         http.authorizeRequests()
                 .antMatchers("/")
                 .authenticated()
@@ -31,11 +31,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .formLogin()
-                .loginPage("/auth/signin")  // get
-                .loginProcessingUrl("/auth/signin") // post
-                .defaultSuccessUrl("/");
+                .loginPage("/auth/signin")
+                .loginProcessingUrl("/auth/signin")
+                .defaultSuccessUrl("/",false);
 
 
 
     }
+
 }
