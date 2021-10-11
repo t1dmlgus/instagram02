@@ -25,17 +25,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         http.authorizeRequests()
-                .antMatchers("/", "auth/")
+                .antMatchers("/")
                 .authenticated()
                 .anyRequest()
                 .permitAll()
                 .and()
                 .formLogin()
-                .loginPage("/auth/signin")
-                .loginProcessingUrl("/auth/signin")
+                .loginPage("/auth/signin")  // get
+                .loginProcessingUrl("/auth/signin") // post
                 .defaultSuccessUrl("/");
-
-
 
 
 
