@@ -1,17 +1,20 @@
 package com.s1dmlgus.instagram02.config;
 
 
+import com.s1dmlgus.instagram02.handler.auth.CustomAuthFailureHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
-@Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
@@ -19,6 +22,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public CustomAuthFailureHandler customAuthFailureHandler(){
+        return new CustomAuthFailureHandler();
+    };
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -33,10 +40,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/auth/signin")
                 .loginProcessingUrl("/auth/signin")
-                .defaultSuccessUrl("/",false);
-
+                .defaultSuccessUrl("/", false)
+                .failureHandler(customAuthFailureHandler());
 
 
     }
 
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring()
+                .requestMatchers(
+                        PathRequest.toStaticResources().atCommonLocations()
+                );
+    }
 }
