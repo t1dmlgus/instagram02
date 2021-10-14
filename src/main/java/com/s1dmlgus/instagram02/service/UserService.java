@@ -30,7 +30,7 @@ public class UserService {
         bcryptPw(user);
         // 3. 권한 설정
 
-        user.setRole(Role.USER);
+        user.setRole(Role.ROLE_USER);
 
         // 4. 영속화
         User saveUser = userRepository.save(user);
