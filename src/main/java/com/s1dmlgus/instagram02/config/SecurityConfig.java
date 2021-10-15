@@ -1,6 +1,7 @@
 package com.s1dmlgus.instagram02.config;
 
 
+import com.s1dmlgus.instagram02.config.oauth.Oauth2DetailsService;
 import com.s1dmlgus.instagram02.handler.auth.CustomAuthFailureHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
+@RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final Oauth2DetailsService oauth2DetailsService;
+
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
@@ -41,7 +46,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/auth/signin")
                 .loginProcessingUrl("/auth/signin")
                 .defaultSuccessUrl("/", false)
-                .failureHandler(customAuthFailureHandler());
+                .failureHandler(customAuthFailureHandler())
+                .and()
+                .oauth2Login()
+                .userInfoEndpoint()
+                .userService(oauth2DetailsService);
 
 
     }
