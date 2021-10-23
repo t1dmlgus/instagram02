@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
@@ -26,14 +27,13 @@ import static com.s1dmlgus.instagram02.common.ApiDocumentUtils.getDocumentRespon
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-
 @Transactional
-@ExtendWith(RestDocumentationExtension.class)    // JUnit5 필수
 @SpringBootTest
 public class AuthApiControllerIntegrationTest {
 
@@ -44,15 +44,13 @@ public class AuthApiControllerIntegrationTest {
 
     private MockMvc mockMvc;
 
-
     @BeforeEach
-    void setup(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
+    void setup(WebApplicationContext webApplicationContext) {
 
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .apply(documentationConfiguration(restDocumentation))
+                .apply(springSecurity())
                 .build();
     }
-
 
     @DisplayName("회원가입 요청 테스트")
     @Test
@@ -64,38 +62,16 @@ public class AuthApiControllerIntegrationTest {
         //when(테스트)
         ResultActions resultAction = mockMvc.perform(
                 post("/api/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
-
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
         );
-
-
-
 
         //then(검증)
         resultAction
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("회원가입이 정상적으로 되었습니다."))
-                .andDo(MockMvcResultHandlers.print())
-                .andDo(document("{class-name}/{method-name}",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestFields(
-                                fieldWithPath("username").type(JsonFieldType.STRING).description("넥네임"),
-                                fieldWithPath("password").type(JsonFieldType.STRING).description("패스워드"),
-                                fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-                                fieldWithPath("name").type(JsonFieldType.STRING).description("이름")
-                ),
-                        responseFields(
-                                fieldWithPath("message").type(JsonFieldType.STRING).description("결과 소시지"),
-                                fieldWithPath("data.userId").type(JsonFieldType.NUMBER).description("회원번호"),
-                                fieldWithPath("data.username").type(JsonFieldType.STRING).description("닉네임"),
-                                fieldWithPath("data.name").type(JsonFieldType.STRING).description("이름"),
-                                fieldWithPath("data.email").type(JsonFieldType.STRING).description("이메일"),
-                                fieldWithPath("data.role").type(JsonFieldType.STRING).description("권한")
-                        )
-                ));
-
+                .andDo(MockMvcResultHandlers.print());
 
     }
 
