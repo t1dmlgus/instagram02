@@ -1,0 +1,34 @@
+spring:
+  profiles:
+    active: test
+
+  h2:
+    console:
+      enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
+
+# Test OAuth
+
+  security:
+    oauth2:
+      client:
+        registration:
+          facebook:
+            client-id: test
+            client-secret: test
+            scope:
+              - public_profile
+              - email
+

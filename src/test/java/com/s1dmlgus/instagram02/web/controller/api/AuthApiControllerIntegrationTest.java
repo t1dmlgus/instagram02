@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @Transactional
-@SpringBootTest
+@SpringBootTest(properties = {"spring.config.location=classpath:application-test.yml"})
 public class AuthApiControllerIntegrationTest {
 
     @Autowired
