@@ -25,32 +25,30 @@
 </head>
 <body>
 
-
-
     <header th:fragment="body_header" class="header">
         <div class="container">
             <!-- 로고 -->
-            <a href="/image/story" class="logo">
+            <a href="/" class="logo">
                 <img src="/images/logo.jpg" alt="">
             </a>
-
-            <!-- 세션유저 js 활용-->
-            <input type="hidden" id="principal" th:value="${principal.user.id}">
-
-
             <!-- nav -->
             <nav class="navi">
                 <ul class="navi-list">
-                    <li class="navi-item"><a href="/image/story">
-                        <i class="fas fa-home"></i>
-                    </a></li>
-                    <li class="navi-item"><a href="/image/popular">
-                        <i class="far fa-compass"></i>
-                    </a></li>
-<!--                    <button th:onclick="|location.href='/user/${user.id}/update'|">회원정보 변경</button>-->
-                    <li class="navi-item"><a th:href="|/user/${principal.user.id}|">
-                        <i class="far fa-user"></i>
-                    </a></li>
+                    <li class="navi-item">
+                        <a href="/">
+                            <i class="fas fa-home"></i>
+                        </a>
+                    </li>
+                    <li class="navi-item">
+                        <a href="/board/popular">
+                            <i class="far fa-compass"></i>
+                        </a>
+                    </li>
+                    <li class="navi-item">
+                        <a href="/user/1">
+                            <i class="far fa-user"></i>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
