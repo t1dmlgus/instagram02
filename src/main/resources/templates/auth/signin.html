@@ -42,7 +42,8 @@
                                 <span>Facebook으로 로그인</span>
                             </button>
                         </div>
-                        <!-- Oauth 소셜로그인end -->
+
+                        <!-- Oauth 로그인 예외 Alert -->
                         <div th:if="${param.error}">
                             <p th:text="${exception}" class="alert alert-danger"></p>
                         </div>
