@@ -1,9 +1,9 @@
 package com.s1dmlgus.instagram02.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.s1dmlgus.instagram02.domain.BaseTimeEntity;
 import com.s1dmlgus.instagram02.web.dto.auth.JoinResponseDto;
+import com.s1dmlgus.instagram02.web.dto.user.UserUpdateRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -43,20 +43,19 @@ public class User extends BaseTimeEntity{
     public void bcryptPw(String encode) {
         this.password = encode;
     }
-
+    // 권한 설정
     public void setRole(Role role) {
         this.role = role;
     }
 
 
-    public JoinResponseDto toDto(){
+    // 프로필 업데이트
+    public void updateUserProfile(UserUpdateRequestDto updateRequestDto) {
 
-        return JoinResponseDto.builder()
-                .userId(id)
-                .username(username)
-                .email(email)
-                .role(role)
-                .name(name)
-                .build();
+        this.name = updateRequestDto.getName();
+        this.website = updateRequestDto.getWebsite();
+        this.phone = updateRequestDto.getPhone();
+        this.bio = updateRequestDto.getBio();
     }
+
 }

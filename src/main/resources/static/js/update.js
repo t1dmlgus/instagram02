@@ -9,7 +9,7 @@ function update(userId, evt) {
 
     $.ajax({
         type:"put",
-        url:`/api/user/${userId}/update`,
+        url:`/api/user/update/${userId}`,
         data: data,
         contentType:'application/x-www-form-urlencoded; charset=utf-8',
         dataType:'json'

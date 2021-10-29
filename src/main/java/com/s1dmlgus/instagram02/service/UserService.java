@@ -6,6 +6,8 @@ import com.s1dmlgus.instagram02.domain.user.UserRepository;
 import com.s1dmlgus.instagram02.handler.exception.CustomException;
 import com.s1dmlgus.instagram02.web.dto.ResponseDto;
 import com.s1dmlgus.instagram02.web.dto.auth.JoinRequestDto;
+import com.s1dmlgus.instagram02.web.dto.auth.JoinResponseDto;
+import com.s1dmlgus.instagram02.web.dto.user.UserUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,10 +37,24 @@ public class UserService {
         // 4. 영속화
         User saveUser = userRepository.save(user);
 
-
-        // user 엔티티를 dto 내에 넣어도 되는지, 아니면 ResponseUserDto를 만드는게 좋을지.,.
-        return new ResponseDto<>("회원가입이 정상적으로 되었습니다.", saveUser.toDto());
+        return new ResponseDto<>("회원가입이 정상적으로 되었습니다.", new JoinResponseDto(saveUser));
     }
+
+    // 프로필 업데이트
+    @Transactional
+    public ResponseDto<?> Update(long id, UserUpdateRequestDto userUpdateRequestDto) {
+
+        // 1. 영속화
+        User user = userRepository.findById(id).get();
+
+        // 2. 더티체킹
+        user.updateUserProfile(userUpdateRequestDto);
+
+
+        return new ResponseDto<>("회원 수정이 완료되었습니다.",user);
+    }
+
+
 
 
     protected void bcryptPw(User user) {
