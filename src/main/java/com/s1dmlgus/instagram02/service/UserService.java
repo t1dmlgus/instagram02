@@ -42,10 +42,11 @@ public class UserService {
 
     // 프로필 업데이트
     @Transactional
-    public ResponseDto<?> Update(long id, UserUpdateRequestDto userUpdateRequestDto) {
+    public ResponseDto<?> update(long id, UserUpdateRequestDto userUpdateRequestDto) {
 
         // 1. 영속화
-        User user = userRepository.findById(id).get();
+        User user = userRepository.findById(id).orElseThrow(
+                ()-> {return new CustomException("찾을 수 없는 id입니다.");});
 
         // 2. 더티체킹
         user.updateUserProfile(userUpdateRequestDto);

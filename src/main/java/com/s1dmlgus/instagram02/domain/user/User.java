@@ -2,7 +2,6 @@ package com.s1dmlgus.instagram02.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.s1dmlgus.instagram02.domain.BaseTimeEntity;
-import com.s1dmlgus.instagram02.web.dto.auth.JoinResponseDto;
 import com.s1dmlgus.instagram02.web.dto.user.UserUpdateRequestDto;
 import lombok.*;
 
@@ -56,6 +55,14 @@ public class User extends BaseTimeEntity{
         this.website = updateRequestDto.getWebsite();
         this.phone = updateRequestDto.getPhone();
         this.bio = updateRequestDto.getBio();
+
+        if (updateRequestDto.getGender().equals("남") || updateRequestDto.getGender().equals("")) {
+            this.gender = Gender.MAN;
+        }else if(updateRequestDto.getGender().equals("여")){
+            this.gender = Gender.WOMAN;
+        }
+
+        //this.gender = updateRequestDto.getGender().equals("MAN") ? Gender.MAN : Gender.WOMAN;
     }
 
 }

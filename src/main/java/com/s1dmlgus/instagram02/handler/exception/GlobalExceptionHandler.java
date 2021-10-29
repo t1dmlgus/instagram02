@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 회원가입 유효성 예외
+    // 유효성 검사 예외
     @ExceptionHandler(CustomValidationException.class)
     public ResponseEntity<ResponseDto<?>> validationException(CustomValidationException e) {
 
@@ -21,9 +21,9 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity Exception(CustomException e) {
+    public ResponseEntity<ResponseDto<?>> Exception(CustomException e) {
 
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ResponseDto<>(e.getMessage(), null), HttpStatus.BAD_REQUEST);
     }
 
 

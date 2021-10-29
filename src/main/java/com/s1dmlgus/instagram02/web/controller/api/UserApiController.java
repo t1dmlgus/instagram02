@@ -10,7 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
@@ -21,9 +24,9 @@ public class UserApiController {
 
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@PathVariable long id, UserUpdateRequestDto userUpdateRequestDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<?> update(@PathVariable long id, @Valid @RequestBody UserUpdateRequestDto userUpdateRequestDto, BindingResult bindingResult,  @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        ResponseDto<?> updateUser = userService.Update(id, userUpdateRequestDto);
+        ResponseDto<?> updateUser = userService.update(id, userUpdateRequestDto);
         principalDetails.setUser((User) updateUser.getData());
 
 
