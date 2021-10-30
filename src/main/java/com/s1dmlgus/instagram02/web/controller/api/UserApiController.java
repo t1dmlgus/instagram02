@@ -27,7 +27,10 @@ public class UserApiController {
     public ResponseEntity<?> update(@PathVariable long id, @Valid @RequestBody UserUpdateRequestDto userUpdateRequestDto, BindingResult bindingResult,  @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         ResponseDto<?> updateUser = userService.update(id, userUpdateRequestDto);
-        principalDetails.setUser((User) updateUser.getData());
+        if (updateUser.getData() != null) {
+            principalDetails.setUser((User) updateUser.getData());
+        }
+
 
 
         return new ResponseEntity<>(updateUser, HttpStatus.OK);

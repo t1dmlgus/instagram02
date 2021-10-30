@@ -1,10 +1,13 @@
 package com.s1dmlgus.instagram02.service;
 
+import com.s1dmlgus.instagram02.domain.user.Gender;
 import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.domain.user.UserRepository;
 import com.s1dmlgus.instagram02.handler.exception.CustomException;
 import com.s1dmlgus.instagram02.web.dto.ResponseDto;
 import com.s1dmlgus.instagram02.web.dto.auth.JoinRequestDto;
+import com.s1dmlgus.instagram02.web.dto.user.UserUpdateRequestDto;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +17,8 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -85,6 +90,35 @@ class UserServiceUnitTest {
 
     }
 
+    @DisplayName("회원정보 수정 테스트")
+    @Test
+    public void userUpdateTest() throws Exception{
+        //given
+        User user = createJoinDto().toEntity();
+        when(userRepository.findById(any())).thenReturn(Optional.of(user));
+
+        //when
+        ResponseDto<?> update = userService.update(1l, createUpdateRequestDto());
+        
+        //then
+        assertThat(update.getMessage()).isEqualTo("회원 수정이 완료되었습니다.");
+        
+    }
+
+    
+    // 회원정보수정 DTO
+    private UserUpdateRequestDto createUpdateRequestDto() {
+        return UserUpdateRequestDto.builder()
+                .name("이의현")
+                .website("github/t1dmlgus")
+                .bio("안녕하세요")
+                .phone("01022")
+                .gender("남")
+                .build();
+    }
+
+
+    // 회원가입 DTO
     private JoinRequestDto createJoinDto() {
 
         JoinRequestDto joinRequestDto1 = new JoinRequestDto();
@@ -96,6 +130,8 @@ class UserServiceUnitTest {
         return joinRequestDto1;
     }
 
+
+    // 유저생성 Entity
     private User createUser() {
         return User.builder()
                 .username("t1dmlgus")
