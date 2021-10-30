@@ -23,6 +23,7 @@ public class JoinRequestDto {
     @NotBlank
     private String email;
     @NotBlank
+    @Size(max = 20, message = "0에서 20자까지 작성할 수 있습니다")
     private String name;
 
 
