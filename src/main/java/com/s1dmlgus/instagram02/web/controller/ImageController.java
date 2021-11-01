@@ -5,24 +5,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 @Controller
-public class BoardController {
+public class ImageController {
 
     @GetMapping("/")
     public String index() {
 
-        return "board/story";
+        return "image/story";
     }
 
-    @GetMapping("/board/popular")
+    @GetMapping("/image/popular")
     public String popular(){
 
-        return "board/popular";
+        return "image/popular";
     }
 
-    @GetMapping("/board/upload")
+    @GetMapping("/image/upload")
     public String upload(){
 
-        return "board/upload";
+        return "image/upload";
     }
 
 }
