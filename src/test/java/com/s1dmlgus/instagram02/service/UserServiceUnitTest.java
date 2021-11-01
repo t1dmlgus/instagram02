@@ -1,13 +1,11 @@
 package com.s1dmlgus.instagram02.service;
 
-import com.s1dmlgus.instagram02.domain.user.Gender;
 import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.domain.user.UserRepository;
-import com.s1dmlgus.instagram02.handler.exception.CustomException;
+import com.s1dmlgus.instagram02.handler.exception.CustomApiException;
 import com.s1dmlgus.instagram02.web.dto.ResponseDto;
 import com.s1dmlgus.instagram02.web.dto.auth.JoinRequestDto;
 import com.s1dmlgus.instagram02.web.dto.user.UserUpdateRequestDto;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,7 +50,7 @@ class UserServiceUnitTest {
 
         //then
         assertThatThrownBy(() -> userService.duplicateUser(user2))
-                .isInstanceOf(CustomException.class)
+                .isInstanceOf(CustomApiException.class)
                 .hasMessage("현재 사용중인 닉네임입니다.");
     }
 

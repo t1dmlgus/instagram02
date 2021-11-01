@@ -20,8 +20,8 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ResponseDto<?>> Exception(CustomException e) {
+    @ExceptionHandler(CustomApiException.class)
+    public ResponseEntity<ResponseDto<?>> Exception(CustomApiException e) {
 
         return new ResponseEntity<>(new ResponseDto<>(e.getMessage(), null), HttpStatus.BAD_REQUEST);
     }
