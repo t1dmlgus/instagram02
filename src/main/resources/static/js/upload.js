@@ -16,18 +16,18 @@ function upload(userId, evt){
         processData: false,
         contentType: false,
         data: formData,
-        dataType:'text'
+        dataType:'json'
 
     }).done(res=>{
 
         console.log(res);
-        alert(res);
+        alert(res.message);
         console.log("upload 성2공");
         location.href=`/user/${userId}`;
 
     }).fail(error=>{
         console.log(error);
-        alert(error);
+        alert(error.responseText);
     });
 
 }
@@ -39,7 +39,7 @@ function imageChoose(obj) {
     console.log(f);
 
 	if (!f.type.match("image.*")) {
-		alert("이미지를 등록해야 합니다.");
+		alert("이미지만 업로드 할 수 있습니다.");
 		return;
 	}
 

@@ -2,8 +2,10 @@ package com.s1dmlgus.instagram02.domain.image;
 
 import com.s1dmlgus.instagram02.domain.BaseTimeEntity;
 import com.s1dmlgus.instagram02.domain.user.User;
+import com.s1dmlgus.instagram02.handler.exception.CustomApiException;
 import com.s1dmlgus.instagram02.web.dto.image.ImageUploadDto;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -30,12 +32,16 @@ public class Image extends BaseTimeEntity {
 
 
     // 파일명 생성
-    public static String createFilename(ImageUploadDto imageUploadDto) {
-
+    public static String createFilename(MultipartFile file) {
+        
+        // 유효성 검사
+        if (file == null) {
+            throw new CustomApiException("이미지가 첨부되지 않았습니다.");
+        }
+        
         // 파일명
         UUID uuid = UUID.randomUUID();
-        return uuid+"_"+imageUploadDto.getFile().getOriginalFilename();
-
+        return uuid+"_"+file.getOriginalFilename();
     }
 
 
