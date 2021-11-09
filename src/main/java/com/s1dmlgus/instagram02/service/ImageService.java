@@ -5,8 +5,11 @@ import com.s1dmlgus.instagram02.config.auth.PrincipalDetails;
 import com.s1dmlgus.instagram02.domain.image.Image;
 import com.s1dmlgus.instagram02.domain.image.ImageRepository;
 
+import com.s1dmlgus.instagram02.web.dto.ResponseDto;
 import com.s1dmlgus.instagram02.web.dto.image.ImageUploadDto;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +23,8 @@ import java.nio.file.Paths;
 @Service
 public class ImageService {
 
+    Logger logger = LoggerFactory.getLogger(ImageService.class);
+
     private final ImageRepository imageRepository;
 
     @Value("${file.path}")
@@ -27,7 +32,7 @@ public class ImageService {
 
 
     // 파일 업로드
-    public void upload(String caption, MultipartFile file, PrincipalDetails principalDetails) {
+    public ResponseDto<?> upload(String caption, MultipartFile file, PrincipalDetails principalDetails) {
 
         // 파일명
         String filename = Image.createFilename(file);
@@ -48,6 +53,10 @@ public class ImageService {
                 .user(principalDetails.getUser())
                 .build();
 
-        imageRepository.save(uploadImage);
+        Image saveImage = imageRepository.save(uploadImage);
+
+        logger.info("upload ImageEntity {}", saveImage);
+
+        return new ResponseDto<>("이미지가 업로드 되었습니다.", saveImage);
     }
 }
