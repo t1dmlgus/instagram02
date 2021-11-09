@@ -6,6 +6,8 @@ import com.s1dmlgus.instagram02.domain.user.Role;
 import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -20,13 +22,17 @@ import java.util.UUID;
 @Service
 public class Oauth2DetailsService extends DefaultOAuth2UserService {
 
+    Logger logger = LoggerFactory.getLogger(Oauth2DetailsService.class);
+
     private final UserRepository userRepository;
+
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        System.out.println("oAuth2User.getAttributes() = " + oAuth2User.getAttributes());
+
+        logger.info(oAuth2User.getAttributes().toString());
 
         Map<String, Object> userInfo = oAuth2User.getAttributes();
 
