@@ -43,7 +43,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FileSizeLimitExceededException.class)
     public ResponseEntity<?> Exception(FileSizeLimitExceededException e) {
 
-        return new ResponseEntity<>("첨부한 이미지는 2MB 이하여야 합니다.", HttpStatus.BAD_REQUEST);
+        logger.info("Exception ! : {} ", e.toString(), e);
+        return new ResponseEntity<>(new ResponseDto<>("첨부한 이미지는 2MB 이하여야 합니다.", null), HttpStatus.BAD_REQUEST);
     }
 
 }

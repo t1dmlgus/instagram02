@@ -27,7 +27,8 @@ function upload(userId, evt){
 
     }).fail(error=>{
         console.log(error);
-        alert(error.responseText);
+        alert(error.responseJSON.message);
+
     });
 
 }

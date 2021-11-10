@@ -31,19 +31,6 @@ public class Image extends BaseTimeEntity {
     private User user;
 
 
-    // 파일명 생성
-    public static String createFilename(MultipartFile file) {
-        
-        // 유효성 검사
-        if (file == null) {
-            throw new CustomApiException("이미지가 첨부되지 않았습니다.");
-        }
-        
-        // 파일명
-        UUID uuid = UUID.randomUUID();
-        return uuid+"_"+file.getOriginalFilename();
-    }
-
 
     // 좋아요
     // 댓글
