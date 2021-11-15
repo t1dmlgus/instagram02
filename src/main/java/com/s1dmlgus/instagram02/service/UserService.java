@@ -3,7 +3,7 @@ package com.s1dmlgus.instagram02.service;
 import com.s1dmlgus.instagram02.domain.user.Role;
 import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.domain.user.UserRepository;
-import com.s1dmlgus.instagram02.handler.exception.CustomException;
+import com.s1dmlgus.instagram02.handler.exception.CustomApiException;
 import com.s1dmlgus.instagram02.web.dto.ResponseDto;
 import com.s1dmlgus.instagram02.web.dto.auth.JoinRequestDto;
 import com.s1dmlgus.instagram02.web.dto.auth.JoinResponseDto;
@@ -46,7 +46,7 @@ public class UserService {
 
         // 1. 영속화
         User user = userRepository.findById(id).orElseThrow(
-                ()-> {return new CustomException("찾을 수 없는 id입니다.");});
+                ()-> {return new CustomApiException("찾을 수 없는 id입니다.");});
 
         // 2. 더티체킹
         user.updateUserProfile(userUpdateRequestDto);
@@ -68,7 +68,7 @@ public class UserService {
 
         boolean existsUsername = userRepository.existsByUsername(user.getUsername());
         if(existsUsername){
-            throw new CustomException("현재 사용중인 닉네임입니다.");
+            throw new CustomApiException("현재 사용중인 닉네임입니다.");
         }
     }
 }

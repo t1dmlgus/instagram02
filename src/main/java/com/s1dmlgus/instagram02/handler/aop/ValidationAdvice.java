@@ -40,13 +40,13 @@ public class ValidationAdvice {
                 if (bindingResult.hasErrors()) {
                     Map<String, String> errorMap = new HashMap<>();
 
+
                     for (FieldError fieldError : bindingResult.getFieldErrors()) {
                         errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());
 
-                        logger.info(fieldError.getField());
-                        logger.info(fieldError.getDefaultMessage());
+                        logger.info("[유효성 검사 실패] - {} : {}",fieldError.getField(), fieldError.getDefaultMessage());
                     }
-                    throw new CustomValidationException("유효성 검사 실패", errorMap);
+                    throw new CustomValidationException(errorMap.get(bindingResult.getFieldErrors().get(0).getField()), errorMap);
                 }
             }
         }
