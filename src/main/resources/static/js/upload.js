@@ -1,8 +1,11 @@
 function upload(userId, evt){
 
     evt.preventDefault();
+    console.log(userId);
+
 
     var formData = new FormData();
+    formData.append("userId", userId);
     formData.append("caption", $('#caption').val());
     formData.append("file", $('#imageFile')[0].files[0]);
 
