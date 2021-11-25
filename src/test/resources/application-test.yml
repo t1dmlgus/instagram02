@@ -32,3 +32,5 @@ spring:
               - public_profile
               - email
 
+file:
+  path: C:/workspace/springbootwork/upload/

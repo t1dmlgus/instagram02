@@ -34,12 +34,12 @@ public class ImageApiController {
     private final ImageService imageService;
 
     @PostMapping("/save")
-    public ResponseEntity<?> imageUpload(@Valid ImageUploadDto imageUploadDto, BindingResult bindingResult) {
+    public ResponseEntity<?> imageUpload(@Valid ImageUploadDto imageUploadDto, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         logger.info("immageUploadDto {}", imageUploadDto);
 
         // 업로드
-        ResponseDto<?> uploadImage = imageService.upload(imageUploadDto);
+        ResponseDto<?> uploadImage = imageService.upload(imageUploadDto, principalDetails);
 
         logger.info("[이미지 업로드 완료] uploadImage : {}", uploadImage);
 

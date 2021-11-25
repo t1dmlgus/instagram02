@@ -21,7 +21,7 @@ public class ImageUploadDto {
     private String userId;
     @NotBlank(message = "타이틀을 입력해주세요.")
     private String caption;
-    private MultipartFile files;
+    private MultipartFile file;
 
 
     public Image toEntity(String postImageUrl, User user){

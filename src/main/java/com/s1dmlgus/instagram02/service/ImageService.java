@@ -1,10 +1,11 @@
 package com.s1dmlgus.instagram02.service;
 
 
+import com.s1dmlgus.instagram02.config.auth.PrincipalDetails;
 import com.s1dmlgus.instagram02.domain.image.Image;
 import com.s1dmlgus.instagram02.domain.image.ImageRepository;
 
-import com.s1dmlgus.instagram02.domain.user.User;
+
 import com.s1dmlgus.instagram02.domain.user.UserRepository;
 import com.s1dmlgus.instagram02.handler.exception.CustomApiException;
 import com.s1dmlgus.instagram02.web.dto.ResponseDto;
@@ -19,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -37,13 +37,17 @@ public class ImageService {
     private String uploadFolder;
 
 
-    // 파일 업로드
+    // 이미지 업로드
     @Transactional
-    public ResponseDto<?> upload(ImageUploadDto imageUploadDto) {
+    public ResponseDto<?> upload(ImageUploadDto imageUploadDto, PrincipalDetails principalDetails) {
+
+        // 파일 명
+        String fileName = createFile(imageUploadDto);
+        // 파일업로드
+        uploadFile(imageUploadDto, fileName);
 
         // 영속화
-        Image afterUploadImage = imageRepository.save(imageUploadDto.toEntity(createFile(imageUploadDto), getUser(imageUploadDto)));
-
+        Image afterUploadImage = imageRepository.save(imageUploadDto.toEntity(fileName, principalDetails.getUser()));
         logger.info("[after 영속화] : {}", afterUploadImage);
 
         return new ResponseDto<>("이미지가 업로드 되었습니다.", afterUploadImage.getId());
@@ -54,43 +58,31 @@ public class ImageService {
         
         // 파일 유효성검사
         validationFile(imageUploadDto);
-
         // 파일명
         UUID uuid = UUID.randomUUID();
-        String fileName = uuid + "_" + imageUploadDto.getFiles().getOriginalFilename();
-        // 파일경로
-        Path imageFilePath = Paths.get(uploadFolder + fileName);
-        // 파일업로드
-        uploadFile(imageUploadDto, imageFilePath);
 
-        return fileName;
+        return uuid + "_" + imageUploadDto.getFile().getOriginalFilename();
     }
 
     // 유효성 검사
     protected void validationFile(ImageUploadDto imageUploadDto) {
-        if (imageUploadDto.getFiles() == null) {
+        if (imageUploadDto.getFile() == null) {
             throw new CustomApiException("이미지가 첨부되지 않았습니다.");
         }
     }
 
-    // 유저 get
-    protected User getUser(ImageUploadDto imageUploadDto) {
-
-        Optional<User> OptionalUser = userRepository.findById(Long.parseLong(imageUploadDto.getUserId()));
-
-        if (OptionalUser.isEmpty()) {
-            throw new CustomApiException("잘못된 요청입니다. 유저가 없습니다.");
-        }else
-            return OptionalUser.get();
-    }
-
     // 파일 업로드
-    protected void uploadFile(ImageUploadDto imageUploadDto, Path imageFilePath) {
+    protected void uploadFile(ImageUploadDto imageUploadDto, String fileName) {
+
+        // 파일경로
+        Path imageFilePath = Paths.get(uploadFolder + fileName);
+
         try {
-            Files.write(imageFilePath, imageUploadDto.getFiles().getBytes());
+            Files.write(imageFilePath, imageUploadDto.getFile().getBytes());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new CustomApiException("이미지 업로드에 실패했습니다.");
+
         }
     }
 
