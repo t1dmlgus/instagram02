@@ -1,6 +1,8 @@
 package com.s1dmlgus.instagram02.service;
 
 
+import com.s1dmlgus.instagram02.config.auth.PrincipalDetails;
+import com.s1dmlgus.instagram02.domain.image.Image;
 import com.s1dmlgus.instagram02.domain.image.ImageRepository;
 import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.domain.user.UserRepository;
@@ -15,41 +17,50 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 
 @Transactional
 @ExtendWith(MockitoExtension.class)
 class ImageServiceUnitTest {
 
+
+    @Spy
     @InjectMocks
     private ImageService imageService;
     @Mock
     private ImageRepository imageRepository;
-    @Mock
-    private UserRepository userRepository;
 
-    private User user01;
+    @Mock
+    private PrincipalDetails principalDetails;
 
 
     @BeforeEach
     public void setUp(){
-        user01 = User.builder()
+        User user = User.builder()
                 .username("t1dmlgus")
                 .password("1234")
                 .email("dmlgus@gamil.com")
                 .name("이의현")
                 .build();
+
+        principalDetails.setUser(user);
+
+        ReflectionTestUtils.setField(imageService, "uploadFolder", "C:/workspace/springbootwork/upload/");
     }
 
 
@@ -59,13 +70,16 @@ class ImageServiceUnitTest {
     public void imageUploadTest() throws Exception {
 
         //given
-        MockMultipartFile file = new MockMultipartFile("파일제목", "파일제목.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
+        MockMultipartFile file = new MockMultipartFile("테스트파일", "테스트파일명.jpeg", "image/jpeg", "<<테스트파일>>".getBytes());
         ImageUploadDto imageUploadDto = new ImageUploadDto("1L", "이미지업로드테스트입니다", file);
-        when(userRepository.findById(Long.parseLong(imageUploadDto.getUserId()))).thenReturn(Optional.of(user01));
-        when(imageRepository.save(any())).thenReturn(imageUploadDto.toEntity("uuid_fileName", user01));
 
+
+        when(imageService.createFile(imageUploadDto)).thenReturn("uuid_테스트명");
+        doNothing().when(imageService).uploadFile(any(), eq("uuid_테스트명"));
+        when(imageRepository.save(any())).thenReturn(imageUploadDto.toEntity(eq("uuid_테스트명"),any()));
+        
         //when
-        ResponseDto<?> upload = imageService.upload(imageUploadDto);
+        ResponseDto<?> upload = imageService.upload(imageUploadDto, principalDetails);
 
         //then
         assertThat(upload.getMessage()).isEqualTo("이미지가 업로드 되었습니다.");
@@ -88,13 +102,12 @@ class ImageServiceUnitTest {
     }
 
 
-    @DisplayName("파일 유효성검사")
+    @DisplayName("파일 유효성검사 테스트")
     @Test
     public void validationFileTest() throws Exception{
         //given
         MockMultipartFile file = null;
         ImageUploadDto imageUploadDto = new ImageUploadDto("1L", "이미지업로드테스트입니다", file);
-
 
         //when
 
@@ -102,6 +115,23 @@ class ImageServiceUnitTest {
         assertThatThrownBy(() -> imageService.validationFile(imageUploadDto))
                 .isInstanceOf(CustomApiException.class)
                 .hasMessage("이미지가 첨부되지 않았습니다.");
+
+    }
+    
+    @DisplayName("파일 업로드 실패 테스트")
+    @Test
+    public void uploadFileTest() throws Exception{
+        //given
+        MockMultipartFile file = new MockMultipartFile("파일제목", "파일제목.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
+        ImageUploadDto imageUploadDto = new ImageUploadDto("1L", "이미지업로드테스트입니다", null);
+
+        //when
+
+        
+        //then
+        assertThatThrownBy(() -> imageService.uploadFile(imageUploadDto, "hi"))
+                .isInstanceOf(CustomApiException.class)
+                .hasMessage("이미지 업로드에 실패했습니다.");
 
     }
 
