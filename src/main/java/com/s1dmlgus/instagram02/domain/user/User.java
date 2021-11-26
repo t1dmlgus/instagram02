@@ -2,13 +2,15 @@ package com.s1dmlgus.instagram02.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.s1dmlgus.instagram02.domain.BaseTimeEntity;
+import com.s1dmlgus.instagram02.domain.image.Image;
 import com.s1dmlgus.instagram02.web.dto.user.UserUpdateRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
-@Builder
-@ToString
+
+@ToString   // 연관관계 exclude
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,6 +39,14 @@ public class User extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private Role role;                  // 권한
 
+
+    @Builder
+    public User(String username, String password, String email, String name) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.name = name;
+    }
 
     // 비밀번호 암호화
     public void bcryptPw(String encode) {

@@ -28,7 +28,7 @@
 		<!--유저정보 및 사진등록 구독하기-->
 		<div class="profile-right">
 			<div class="name-group">
-				<h2>TherePrograming</h2>
+				<h2 th:text="${profileDto.username}">gg</h2>
 
 				<button class="cta" onclick="location.href='/image/upload'">사진등록</button>
 				<button class="cta" onclick="toggleSubscribe(this)">구독하기</button>
@@ -39,15 +39,16 @@
 
 			<div class="subscribe">
 				<ul>
-					<li><a href=""> 게시물<span>3</span>
-					</a></li>
+					<li><a href=""> 게시물<span th:text="${profileDto.imageCount}">3</span></a></li>
 					<li><a href="javascript:subscribeInfoModalOpen();"> 구독정보<span>2</span>
 					</a></li>
 				</ul>
 			</div>
 			<div class="state">
-				<h4>자기 소개입니다.</h4>
-				<h4>https://github.com/codingspecialist</h4>
+				<h4 th:text="${#strings.equals(profileDto.bio, null)} ?  '자기 소개입니다' : ${profileDto.bio}"></h4>
+				<a th:href="${#strings.equals(profileDto.website, null)} ?  '' : ${profileDto.website}">
+					<div th:text="${#strings.equals(profileDto.website, null)} ?  '' : ${profileDto.website}"></div>
+				</a>
 			</div>
 		</div>
 		<!--유저정보 및 사진등록 구독하기-->
@@ -67,30 +68,12 @@
 				<!--아이템들-->
 
 
-				<div class="img-box">
-					<a href=""> <img src="/images/home.jpg" />
+				<div class="img-box" th:each="image : ${profileDto.images}" th:reversed>
+					<a href=""> <img th:src="|/upload/${image.postImageUrl}|" />
 					</a>
-					<div class="comment">
-						<a href="#" class=""> <i class="fas fa-heart"></i><span>0</span>
-						</a>
-					</div>
-				</div>
+<!--					<div class="comment"><a href="#" class=""> <i class="fas fa-heart"></i><span th:text="${image.likeCount}">2</span>-->
 
-				<div class="img-box">
-					<a href=""> <img src="/images/home.jpg" />
 					</a>
-					<div class="comment">
-						<a href="#" class=""> <i class="fas fa-heart"></i><span>0</span>
-						</a>
-					</div>
-				</div>
-
-				<div class="img-box">
-					<a href=""> <img src="/images/home.jpg" />
-					</a>
-					<div class="comment">
-						<a href="#" class=""> <i class="fas fa-heart"></i><span>0</span>
-						</a>
 					</div>
 				</div>
 

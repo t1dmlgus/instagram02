@@ -1,24 +1,37 @@
 package com.s1dmlgus.instagram02.service;
 
+import com.s1dmlgus.instagram02.domain.image.Image;
+import com.s1dmlgus.instagram02.domain.image.ImageRepository;
 import com.s1dmlgus.instagram02.domain.user.Role;
 import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.domain.user.UserRepository;
 import com.s1dmlgus.instagram02.handler.exception.CustomApiException;
+import com.s1dmlgus.instagram02.handler.exception.CustomException;
 import com.s1dmlgus.instagram02.web.dto.ResponseDto;
 import com.s1dmlgus.instagram02.web.dto.auth.JoinRequestDto;
 import com.s1dmlgus.instagram02.web.dto.auth.JoinResponseDto;
+import com.s1dmlgus.instagram02.web.dto.user.UserProfileResponseDto;
 import com.s1dmlgus.instagram02.web.dto.user.UserUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ImageRepository imageRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    Logger logger = LoggerFactory.getLogger(UserService.class);
 
     // 회원가입
     @Transactional
@@ -71,4 +84,17 @@ public class UserService {
             throw new CustomApiException("현재 사용중인 닉네임입니다.");
         }
     }
+
+    public UserProfileResponseDto getProfile(Long id) {
+
+        User user = userRepository.findById(id).orElseThrow(() -> {
+            throw new CustomException("해당 유저가 없습니다");
+        });
+        List<Image> imageList = imageRepository.findAllByUserId(id);
+
+        logger.info("imageList : {}", imageList);
+
+        return new UserProfileResponseDto(user, imageList);
+    }
+
 }
