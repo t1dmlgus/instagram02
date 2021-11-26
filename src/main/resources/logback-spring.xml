@@ -6,7 +6,7 @@
               value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
 
     <springProfile name="!prod">
-        <include resource="console-appender.xml"/>
+        <include resource="./logger/console-appender.xml"/>
 
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
@@ -14,9 +14,9 @@
     </springProfile>
 
     <springProfile name="prod">
-        <include resource="file-info-appender.xml"/>
-        <include resource="file-warn-appender.xml"/>
-        <include resource="file-error-appender.xml"/>
+        <include resource="./logger/file-info-appender.xml"/>
+        <include resource="./logger/file-warn-appender.xml"/>
+        <include resource="./logger/file-error-appender.xml"/>
 
         <root level="INFO">
             <appender-ref ref="FILE-INFO"/>
