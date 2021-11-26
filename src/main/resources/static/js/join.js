@@ -21,26 +21,27 @@ function join(evt) {
     evt.preventDefault();
 
     //let data = $("#profileUpdate").serialize();
-    //console.log(data);
 
-    let data2 = $("#profileUpdate").serializeObject();
-    console.log(data2);
+    let data = $("#profileUpdate").serializeObject();
+    console.log(data);
 
     $.ajax({
-        type:"post",
-        url:`/api/auth/signup`,
-        data: JSON.stringify(data2),
-        contentType:'application/json; charset=utf-8',
-        dataType:'json'
+        type:"POST",
+        url:"/api/auth/signup",
+        data: JSON.stringify(data),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json"
+
+
     }).done(res=>{
         console.log(res);
         alert(res.message);
         location.href=`/`;
     }).fail(error=>{
-        console.log(error.responseJSON);
+        console.log(error);
+        alert(JSON.stringify(error.responseJSON.data));
 
         if(error.responseJSON.data != null){
-            alert(JSON.stringify(error.responseJSON.data));
         }else{
             alert(error.responseJSON.message);
         }
