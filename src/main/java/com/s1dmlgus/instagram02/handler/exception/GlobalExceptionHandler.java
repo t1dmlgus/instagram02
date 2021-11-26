@@ -1,20 +1,18 @@
 package com.s1dmlgus.instagram02.handler.exception;
 
 
+
+import com.s1dmlgus.instagram02.utils.Script;
 import com.s1dmlgus.instagram02.web.dto.ResponseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
 @RestControllerAdvice
@@ -38,6 +36,14 @@ public class GlobalExceptionHandler {
         logger.info("Exception ! : {} ", e.toString(), e);
         return new ResponseEntity<>(new ResponseDto<>(e.getMessage(), null), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(CustomException.class)
+    public String CustomException(CustomException e) {
+
+        logger.info("Exception ! : {} ", e.toString(), e);
+        return Script.back(e.getMessage());
+    }
+
 
     // 이미지 크기 예외처리
     @ExceptionHandler(FileSizeLimitExceededException.class)
