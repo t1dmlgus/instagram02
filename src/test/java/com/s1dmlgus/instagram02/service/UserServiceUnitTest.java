@@ -1,11 +1,14 @@
 package com.s1dmlgus.instagram02.service;
 
+import com.s1dmlgus.instagram02.domain.image.Image;
 import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.domain.user.UserRepository;
 import com.s1dmlgus.instagram02.handler.exception.CustomApiException;
 import com.s1dmlgus.instagram02.web.dto.ResponseDto;
 import com.s1dmlgus.instagram02.web.dto.auth.JoinRequestDto;
+import com.s1dmlgus.instagram02.web.dto.user.UserProfileResponseDto;
 import com.s1dmlgus.instagram02.web.dto.user.UserUpdateRequestDto;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,9 +16,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -28,11 +32,13 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class UserServiceUnitTest {
 
+    Logger logger = LoggerFactory.getLogger(UserServiceUnitTest.class);
+
     @InjectMocks
     private UserService userService;
-
     @Mock
     private UserRepository userRepository;
+
 
     @Spy
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -80,8 +86,7 @@ class UserServiceUnitTest {
 
         //when
         ResponseDto<?> join = userService.join(joindto);
-
-        System.out.println("join = " + join);
+        logger.info("join {} :", join);
 
         //then
         assertThat(join.getMessage()).isEqualTo("회원가입이 정상적으로 되었습니다.");
@@ -96,13 +101,30 @@ class UserServiceUnitTest {
         when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
         //when
-        ResponseDto<?> update = userService.update(1l, createUpdateRequestDto());
+        ResponseDto<?> update = userService.update(1L, createUpdateRequestDto());
         
         //then
         assertThat(update.getMessage()).isEqualTo("회원 수정이 완료되었습니다.");
         
     }
 
+    
+    @DisplayName("프로필정보 가져오기 테스트")
+    @Test
+    public void getProfileTest() throws Exception{
+        //given
+        Long userId = 1L;
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(createProfile()));
+
+        //when
+        UserProfileResponseDto profile = userService.getProfile(userId);
+        logger.info("profile : {}", profile);
+
+        //then
+        Assertions.assertThat(profile.getImages().get(0).getCaption()).isEqualTo("테스트이미지");
+
+    }
+    
     
     // 회원정보수정 DTO
     private UserUpdateRequestDto createUpdateRequestDto() {
@@ -132,11 +154,27 @@ class UserServiceUnitTest {
     // 유저생성 Entity
     private User createUser() {
         return User.builder()
-                .username("t1dmlgus")
+                .username("test1Dmlgus")
                 .password("1234")
                 .email("dmlgus@gmail.com")
-                .name("이의현")
+                .name("테스트의현")
                 .build();
+    }
+
+
+    // 프로필dto 주입
+    private User createProfile(){
+
+        User user = createUser();
+        Image image = Image.builder()
+                .caption("테스트이미지")
+                .postImageUrl("테스트명.jpg")
+                .user(user)
+                .build();
+        user.getImages().add(image);
+
+        return user;
+
     }
 
 }

@@ -1,5 +1,6 @@
 package com.s1dmlgus.instagram02.domain.image;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.s1dmlgus.instagram02.domain.BaseTimeEntity;
 import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.handler.exception.CustomApiException;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Builder
-@ToString
+@ToString(exclude = "user")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -26,11 +27,13 @@ public class Image extends BaseTimeEntity {
     private String postImageUrl;
 
 
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @ManyToOne
     private User user;
 
 
+    //...
 
     // 좋아요
     // 댓글

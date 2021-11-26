@@ -49,8 +49,9 @@ public class Oauth2DetailsService extends DefaultOAuth2UserService {
                     .password(password)
                     .email(email)
                     .name(name)
-                    .role(Role.ROLE_USER)
                     .build();
+
+            user.setRole(Role.ROLE_USER);
 
             return new PrincipalDetails(userRepository.save(user), oAuth2User.getAttributes());           // 리턴 -> 세션에 저장
         } else {                             // 페이스북으로 이미 회원가입이 되어있음
