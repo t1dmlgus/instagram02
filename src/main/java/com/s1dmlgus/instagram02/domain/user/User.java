@@ -7,10 +7,11 @@ import com.s1dmlgus.instagram02.web.dto.user.UserUpdateRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
-@ToString   // 연관관계 exclude
+@ToString(exclude = "images")
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,6 +40,9 @@ public class User extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private Role role;                  // 권한
 
+
+    @OneToMany(mappedBy = "user")
+    private List<Image> images = new ArrayList<Image>();
 
     @Builder
     public User(String username, String password, String email, String name) {

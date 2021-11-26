@@ -1,11 +1,9 @@
 package com.s1dmlgus.instagram02.service;
 
 import com.s1dmlgus.instagram02.domain.image.Image;
-import com.s1dmlgus.instagram02.domain.image.ImageRepository;
 import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.domain.user.UserRepository;
 import com.s1dmlgus.instagram02.handler.exception.CustomApiException;
-import com.s1dmlgus.instagram02.web.controller.UserController;
 import com.s1dmlgus.instagram02.web.dto.ResponseDto;
 import com.s1dmlgus.instagram02.web.dto.auth.JoinRequestDto;
 import com.s1dmlgus.instagram02.web.dto.user.UserProfileResponseDto;
@@ -22,9 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -39,14 +34,11 @@ class UserServiceUnitTest {
 
     Logger logger = LoggerFactory.getLogger(UserServiceUnitTest.class);
 
-
     @InjectMocks
     private UserService userService;
-
     @Mock
     private UserRepository userRepository;
-    @Mock
-    private ImageRepository imageRepository;
+
 
     @Spy
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -94,8 +86,7 @@ class UserServiceUnitTest {
 
         //when
         ResponseDto<?> join = userService.join(joindto);
-
-        System.out.println("join = " + join);
+        logger.info("join {} :", join);
 
         //then
         assertThat(join.getMessage()).isEqualTo("회원가입이 정상적으로 되었습니다.");
@@ -110,7 +101,7 @@ class UserServiceUnitTest {
         when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
         //when
-        ResponseDto<?> update = userService.update(1l, createUpdateRequestDto());
+        ResponseDto<?> update = userService.update(1L, createUpdateRequestDto());
         
         //then
         assertThat(update.getMessage()).isEqualTo("회원 수정이 완료되었습니다.");
@@ -123,9 +114,7 @@ class UserServiceUnitTest {
     public void getProfileTest() throws Exception{
         //given
         Long userId = 1L;
-        when(userRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(createUser()));
-        when(imageRepository.findAllByUserId(any(Long.class))).thenReturn(createImages());
-
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(createProfile()));
 
         //when
         UserProfileResponseDto profile = userService.getProfile(userId);
@@ -173,18 +162,19 @@ class UserServiceUnitTest {
     }
 
 
-    private List<Image> createImages(){
+    // 프로필dto 주입
+    private User createProfile(){
 
-        Image testImage = Image.builder()
+        User user = createUser();
+        Image image = Image.builder()
                 .caption("테스트이미지")
                 .postImageUrl("테스트명.jpg")
-                .user(createUser())
+                .user(user)
                 .build();
+        user.getImages().add(image);
 
-        List<Image> testImages = new ArrayList<>();
-        testImages.add(testImage);
+        return user;
 
-        return testImages;
     }
 
 }

@@ -44,7 +44,6 @@ public class UserService {
         // 2. 암호화
         bcryptPw(user);
         // 3. 권한 설정
-
         user.setRole(Role.ROLE_USER);
 
         // 4. 영속화
@@ -90,11 +89,9 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() -> {
             throw new CustomException("해당 유저가 없습니다");
         });
-        List<Image> imageList = imageRepository.findAllByUserId(id);
+        logger.info("user : {}", user);
 
-        logger.info("imageList : {}", imageList);
-
-        return new UserProfileResponseDto(user, imageList);
+        return new UserProfileResponseDto(user);
     }
 
 }

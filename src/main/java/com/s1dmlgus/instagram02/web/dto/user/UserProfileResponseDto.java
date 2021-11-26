@@ -17,12 +17,12 @@ public class UserProfileResponseDto {
     private int imageCount;
 
 
-    public UserProfileResponseDto(User user, List<Image> imageList) {
+    public UserProfileResponseDto(User user) {
         this.userId = user.getId();
         this.username = user.getName();
         this.website = user.getWebsite();
-        this.images = imageList;
-        this.imageCount = imageList.size();
+        this.images = user.getImages();
+        this.imageCount = user.getImages().size();
 
     }
 
