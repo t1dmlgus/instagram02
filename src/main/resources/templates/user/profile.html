@@ -69,7 +69,7 @@
 
 
 				<div class="img-box" th:each="image : ${profileDto.images}" th:reversed>
-					<a href=""> <img th:src="|/upload/${image.postImageUrl}|" />
+					<a href=""> <img th:src="${image.postImageUrl}" />
 					</a>
 <!--					<div class="comment"><a href="#" class=""> <i class="fas fa-heart"></i><span th:text="${image.likeCount}">2</span>-->
 

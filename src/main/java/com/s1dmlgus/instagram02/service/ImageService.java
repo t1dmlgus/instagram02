@@ -44,11 +44,11 @@ public class ImageService {
         //uploadFile(imageUploadDto, fileName);
 
         // s3 파일 업로드
-        String s3FileName = s3Service.upload(imageUploadDto, fileName);
+        s3Service.upload(imageUploadDto, fileName);
 
 
         // 영속화
-        Image afterUploadImage = imageRepository.save(imageUploadDto.toEntity(s3FileName, principalDetails.getUser()));
+        Image afterUploadImage = imageRepository.save(imageUploadDto.toEntity(fileName, principalDetails.getUser()));
         logger.info("[after 영속화] : {}", afterUploadImage);
 
         return new ResponseDto<>("이미지가 업로드 되었습니다.", afterUploadImage.getId());

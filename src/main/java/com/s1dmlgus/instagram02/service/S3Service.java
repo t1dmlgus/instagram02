@@ -19,6 +19,8 @@ import javax.annotation.PostConstruct;
 @Service
 public class S3Service {
 
+    public static final String CLOUD_FRONT_DOMAIN_NAME="d3r3itann8ixvx.cloudfront.net";
+
     private AmazonS3 s3Client;
 
     @Value("${cloud.aws.credentials.accessKey}")
@@ -58,7 +60,7 @@ public class S3Service {
             throw new CustomApiException("s3 이미지 업로드에 실패하였습니다.");
         }
 
-        return s3Client.getUrl(bucket, fileName).toString();
+        return fileName;
     }
 
 

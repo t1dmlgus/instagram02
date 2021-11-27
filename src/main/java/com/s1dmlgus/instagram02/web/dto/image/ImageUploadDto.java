@@ -2,6 +2,7 @@ package com.s1dmlgus.instagram02.web.dto.image;
 
 import com.s1dmlgus.instagram02.domain.image.Image;
 import com.s1dmlgus.instagram02.domain.user.User;
+import com.s1dmlgus.instagram02.service.S3Service;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +27,7 @@ public class ImageUploadDto {
     public Image toEntity(String fileName, User user){
         return Image.builder()
                 .caption(caption)
-                .postImageUrl(fileName)
+                .postImageUrl("https://" + S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + fileName)
                 .user(user)
                 .build();
     }
