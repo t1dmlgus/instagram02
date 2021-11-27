@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
-import java.util.Optional;
 
 
 @Builder
@@ -24,10 +23,10 @@ public class ImageUploadDto {
     private MultipartFile file;
 
 
-    public Image toEntity(String postImageUrl, User user){
+    public Image toEntity(String fileName, User user){
         return Image.builder()
                 .caption(caption)
-                .postImageUrl(postImageUrl)
+                .postImageUrl(fileName)
                 .user(user)
                 .build();
     }
