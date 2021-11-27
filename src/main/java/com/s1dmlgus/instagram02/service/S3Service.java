@@ -11,11 +11,14 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
 import com.s1dmlgus.instagram02.handler.exception.CustomApiException;
 import com.s1dmlgus.instagram02.web.dto.image.ImageUploadDto;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 
+@NoArgsConstructor
 @Service
 public class S3Service {
 
@@ -46,7 +49,8 @@ public class S3Service {
     }
 
     // s3 업로드
-    public String upload(ImageUploadDto imageUploadDto, String fileName){
+    @Transactional
+    public void upload(ImageUploadDto imageUploadDto, String fileName){
 
         try {
             ObjectMetadata objMeta = new ObjectMetadata();
@@ -59,8 +63,6 @@ public class S3Service {
             //e.printStackTrace();
             throw new CustomApiException("s3 이미지 업로드에 실패하였습니다.");
         }
-
-        return fileName;
     }
 
 

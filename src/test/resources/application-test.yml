@@ -34,3 +34,15 @@ spring:
 
 file:
   path: C:/workspace/springbootwork/upload/
+
+cloud:
+  aws:
+    credentials:
+      accessKey: test
+      secretKey: test
+    s3:
+      bucket: s1dmlgus-instar03
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

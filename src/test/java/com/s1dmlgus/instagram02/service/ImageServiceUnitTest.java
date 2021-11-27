@@ -2,15 +2,11 @@ package com.s1dmlgus.instagram02.service;
 
 
 import com.s1dmlgus.instagram02.config.auth.PrincipalDetails;
-import com.s1dmlgus.instagram02.domain.image.Image;
 import com.s1dmlgus.instagram02.domain.image.ImageRepository;
 import com.s1dmlgus.instagram02.domain.user.User;
-import com.s1dmlgus.instagram02.domain.user.UserRepository;
 import com.s1dmlgus.instagram02.handler.exception.CustomApiException;
 import com.s1dmlgus.instagram02.web.dto.ResponseDto;
 import com.s1dmlgus.instagram02.web.dto.image.ImageUploadDto;
-
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,19 +15,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
 
-
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 
 @Transactional
@@ -42,6 +35,9 @@ class ImageServiceUnitTest {
     @Spy
     @InjectMocks
     private ImageService imageService;
+    @Mock
+    private S3Service s3Service;
+
     @Mock
     private ImageRepository imageRepository;
 
@@ -75,7 +71,7 @@ class ImageServiceUnitTest {
 
 
         when(imageService.createFile(imageUploadDto)).thenReturn("uuid_테스트명");
-        doNothing().when(imageService).uploadFile(any(), eq("uuid_테스트명"));
+        doNothing().when(s3Service).upload(any(), eq("uuid_테스트명"));
         when(imageRepository.save(any())).thenReturn(imageUploadDto.toEntity(eq("uuid_테스트명"),any()));
         
         //when
@@ -85,6 +81,7 @@ class ImageServiceUnitTest {
         assertThat(upload.getMessage()).isEqualTo("이미지가 업로드 되었습니다.");
         
     }
+
     
     @DisplayName("파일 생성 테스트")
     @Test
