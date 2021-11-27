@@ -1,7 +1,5 @@
 package com.s1dmlgus.instagram02.service;
 
-import com.s1dmlgus.instagram02.domain.image.Image;
-import com.s1dmlgus.instagram02.domain.image.ImageRepository;
 import com.s1dmlgus.instagram02.domain.user.Role;
 import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.domain.user.UserRepository;
@@ -19,16 +17,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
-    private final ImageRepository imageRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     Logger logger = LoggerFactory.getLogger(UserService.class);

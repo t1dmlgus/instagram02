@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@RequestMapping("/api")
 @RestController
 public class AuthApiController {
 
@@ -24,8 +23,10 @@ public class AuthApiController {
 
     private final UserService userService;
 
-    @PostMapping("/auth/signup")
+    @PostMapping("/signup")
     public ResponseEntity<?> join(@Valid @RequestBody JoinRequestDto joinRequestDto, BindingResult bindingResult) {
+
+        logger.info(joinRequestDto.toString());
 
         ResponseDto<?> joinUser = userService.join(joinRequestDto);
 

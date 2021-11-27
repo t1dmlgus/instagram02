@@ -20,7 +20,7 @@ public class AuthController {
     }
 
     // 로그인
-    @RequestMapping("/signin")
+    @GetMapping("/signin")
     public String login(@RequestParam(value = "error", required = false) String error,
                         @RequestParam(value = "exception", required = false) String exception,
                         Model model) {

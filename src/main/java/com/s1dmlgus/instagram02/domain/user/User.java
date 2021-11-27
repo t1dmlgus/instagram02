@@ -62,6 +62,15 @@ public class User extends BaseTimeEntity{
     }
 
 
+    @Builder
+    public User(String username, String password, String email, String name, Role role) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.name = name;
+        this.role = role;
+    }
+
     // 프로필 업데이트
     public void updateUserProfile(UserUpdateRequestDto updateRequestDto) {
 
