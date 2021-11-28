@@ -23,6 +23,7 @@
 * Junit5
 * AWS EC2
 * AWS RDS
+* AWS S3
 
 ---
 <br>
