@@ -47,6 +47,21 @@ deploy:
       branch: develop
     
 
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY # Travis settings에 설정된 값
+    secret_access_key: $AWS_SECRET_KEY # Travis settings에 설정된 값
+    bucket: s1dmlgus-instar03 # S3 버킷
+    key: s1dmlgus-instar02.zip
+    
+    bundle_type: zip
+    application: s1dmlgus-instar02
+    deployment_group: s1dmlgus-instar02-group
+    region: ap-northeast-2
+    wait-until-deployed: true
+
+
+
+# CI 실행 완료 시 메일로 
 notifications:
   email:
     recipients:
