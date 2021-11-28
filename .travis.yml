@@ -18,27 +18,33 @@ cache:
     - '$HOME/.m2/repository'
     - '$HOME/.gradle'
 
-# main 브랜치에 push 되면 수행되는 명령어이다. 
+# develop 브랜치에 push 되면 수행되는 명령어이다. 
 # 프로젝트 내에 권한이 추가된 gradlew를 활용하여 clean, build를 진행한다.
 script: "./gradlew clean build"
 
 
-before_deploy:
-  - zip -r s1dmlgus-instar02 * 
-  - mkdir -p deploy
-  - mv s1dmlgus-instar02.zip deploy/s1dmlgus-instar02.zip
-  
 
-deploy:
+before_deploy:
+  # 현재 위치의 모든 파일을 springboot-test로 압축한다.
+  - zip -r s1dmlgus-instar02 * 
+  # deploy 디렉토리를 Travis가 실행 중인 위치에 생성한다.
+  - mkdir -p deploy
+  # 생성한 .zip 파일을 deploy 아래로 이동한다.
+  - mv s1dmlgus-instar02.zip deploy/s1dmlgus-instar02.zip
+
+# 외부 서비스와 연동할 행위들을 선언한다.
+deploy: 
   - provider: s3
-    access_key_id: $AWS_ACCESS_KEY
-    secret_access_key: $AWS_SECRET_KEY
-    bucket: s1dmlgus-instar03
-    region: ap-northest-2
+    access_key_id: $AWS_ACCESS_KEY # Travis settings에 설정된 값
+    secret_access_key: $AWS_SECRET_KEY # Travis settings에 설정된 값
+    bucket: s1dmlgus-instar03 # S3 버킷
+    region: ap-northeast-2
     skip_cleanup: true
-    acl: private
-    local_dir: deploy
+    acl: private # zip 파일 접근을 private으로
+    local_dir: deploy # before_deploy에서 생성한 디렉토리로 이동한다. 해당 위치의 파일만 이동시킨다.
     wait-until-deployed: true
+    on:
+      branch: develop
     
 
 notifications:
