@@ -22,6 +22,25 @@ cache:
 # 프로젝트 내에 권한이 추가된 gradlew를 활용하여 clean, build를 진행한다.
 script: "./gradlew clean build"
 
+
+before_deploy:
+  - zip -r s1dmlgus-instar02 * 
+  - mkdir -p deploy
+  - mv s1dmlgus-instar02.zip deploy/s1dmlgus-instar02.zip
+  
+
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: s1dmlgus-instar03
+    region: ap-northest-2
+    skip_cleanup: true
+    acl: private
+    local_dir: deploy
+    wait-until-deployed: true
+    
+
 notifications:
   email:
     recipients:
