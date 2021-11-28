@@ -4,9 +4,6 @@ package com.s1dmlgus.instagram02.service;
 import com.s1dmlgus.instagram02.config.auth.PrincipalDetails;
 import com.s1dmlgus.instagram02.domain.image.Image;
 import com.s1dmlgus.instagram02.domain.image.ImageRepository;
-
-
-import com.s1dmlgus.instagram02.domain.user.UserRepository;
 import com.s1dmlgus.instagram02.handler.exception.CustomApiException;
 import com.s1dmlgus.instagram02.web.dto.ResponseDto;
 import com.s1dmlgus.instagram02.web.dto.image.ImageUploadDto;
@@ -30,8 +27,7 @@ public class ImageService {
     Logger logger = LoggerFactory.getLogger(ImageService.class);
 
     private final ImageRepository imageRepository;
-    private final UserRepository userRepository;
-
+    private final S3Service s3Service;
 
     @Value("${file.path}")
     private String uploadFolder;
@@ -39,12 +35,17 @@ public class ImageService {
 
     // 이미지 업로드
     @Transactional
-    public ResponseDto<?> upload(ImageUploadDto imageUploadDto, PrincipalDetails principalDetails) {
+    public ResponseDto<?> upload(ImageUploadDto imageUploadDto, PrincipalDetails principalDetails){
 
         // 파일 명
         String fileName = createFile(imageUploadDto);
+
         // 파일업로드
-        uploadFile(imageUploadDto, fileName);
+        //uploadFile(imageUploadDto, fileName);
+
+        // s3 파일 업로드
+        s3Service.upload(imageUploadDto, fileName);
+
 
         // 영속화
         Image afterUploadImage = imageRepository.save(imageUploadDto.toEntity(fileName, principalDetails.getUser()));
@@ -53,7 +54,7 @@ public class ImageService {
         return new ResponseDto<>("이미지가 업로드 되었습니다.", afterUploadImage.getId());
     }
 
-    // 파일 생성
+    // 파일명
     protected String createFile(ImageUploadDto imageUploadDto) {
         
         // 파일 유효성검사

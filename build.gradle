@@ -35,6 +35,10 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	implementation 'org.mariadb.jdbc:mariadb-java-client'
 
+	// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-aws-context
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-aws-context', version: '2.2.2.RELEASE'
+
+
 
 	asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
