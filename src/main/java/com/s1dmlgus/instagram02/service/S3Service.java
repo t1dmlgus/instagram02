@@ -9,6 +9,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
+import com.s1dmlgus.instagram02.handler.exception.CustomApiException;
 import com.s1dmlgus.instagram02.web.dto.image.ImageUploadDto;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,8 +60,8 @@ public class S3Service {
             s3Client.putObject(new PutObjectRequest(bucket, fileName, imageUploadDto.getFile().getInputStream(), objMeta)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (Exception e) {
-            e.printStackTrace();
-            //throw new CustomApiException("s3 이미지 업로드에 실패하였습니다.");
+            //e.printStackTrace();
+            throw new CustomApiException("s3 이미지 업로드에 실패하였습니다.");
         }
     }
 
