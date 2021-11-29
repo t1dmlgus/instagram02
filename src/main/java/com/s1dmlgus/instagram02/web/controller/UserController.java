@@ -2,7 +2,6 @@ package com.s1dmlgus.instagram02.web.controller;
 
 
 import com.s1dmlgus.instagram02.config.auth.PrincipalDetails;
-import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.service.UserService;
 import com.s1dmlgus.instagram02.web.dto.user.UserProfileResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,7 @@ public class UserController {
     @GetMapping("/{id}")
     public String profile(@PathVariable Long id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        UserProfileResponseDto profileDto = userService.getProfile(id);
+        UserProfileResponseDto profileDto = userService.getProfile(id, principalDetails.getUser().getId());
 
         logger.info("profileDto : {}", profileDto);
 

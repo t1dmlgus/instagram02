@@ -47,8 +47,8 @@ class UserServiceUnitTest {
     @Test
     public void duplicateUsernameTest() throws Exception {
         //given
-        User user1 = createUser();
-        User user2 = createUser();
+        User user1 = testUser();
+        User user2 = testUser();
         when(userRepository.existsByUsername(user1.getUsername())).thenReturn(true);
 
         //when
@@ -65,7 +65,7 @@ class UserServiceUnitTest {
     @Test
     public void bcryptPwTest() throws Exception {
         //given
-        User user = createUser();
+        User user = testUser();
 
         //when
         userService.bcryptPw(user);
@@ -117,7 +117,7 @@ class UserServiceUnitTest {
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(createProfile()));
 
         //when
-        UserProfileResponseDto profile = userService.getProfile(userId);
+        UserProfileResponseDto profile = userService.getProfile(userId, 1L);
         logger.info("profile : {}", profile);
 
         //then
@@ -152,28 +152,28 @@ class UserServiceUnitTest {
 
 
     // 유저생성 Entity
-    private User createUser() {
-        return User.builder()
-                .username("test1Dmlgus")
-                .password("1234")
-                .email("dmlgus@gmail.com")
-                .name("테스트의현")
-                .build();
+    private User testUser() {
+
+        User user = new User();
+        user.testUser("test1Dmlgus", "1234", "dmlgus@gmail.com", "테스트의현");
+
+        return user;
     }
+
 
 
     // 프로필dto 주입
     private User createProfile(){
 
-        User user = createUser();
+        User testUser = testUser();
         Image image = Image.builder()
                 .caption("테스트이미지")
                 .postImageUrl("테스트명.jpg")
-                .user(user)
+                .user(testUser)
                 .build();
-        user.getImages().add(image);
+        testUser.getImages().add(image);
 
-        return user;
+        return testUser;
 
     }
 
