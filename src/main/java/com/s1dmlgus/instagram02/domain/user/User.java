@@ -1,6 +1,7 @@
 package com.s1dmlgus.instagram02.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.s1dmlgus.instagram02.domain.BaseTimeEntity;
 import com.s1dmlgus.instagram02.domain.image.Image;
 import com.s1dmlgus.instagram02.web.dto.user.UserUpdateRequestDto;
@@ -40,7 +41,7 @@ public class User extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private Role role;                  // 권한
 
-
+    @JsonIgnoreProperties({"user"})
     @OneToMany(mappedBy = "user")
     private List<Image> images = new ArrayList<Image>();
 
@@ -51,6 +52,16 @@ public class User extends BaseTimeEntity{
         this.email = email;
         this.name = name;
     }
+
+    @Builder
+    public void testUser(String username, String password, String email, String name) {
+        this.id = 1L;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.name = name;
+    }
+
 
     // 비밀번호 암호화
     public void bcryptPw(String encode) {
@@ -75,9 +86,9 @@ public class User extends BaseTimeEntity{
     public void updateUserProfile(UserUpdateRequestDto updateRequestDto) {
 
         this.name = updateRequestDto.getName();
+        this.bio = updateRequestDto.getBio();
         this.website = updateRequestDto.getWebsite();
         this.phone = updateRequestDto.getPhone();
-        this.bio = updateRequestDto.getBio();
 
         if (updateRequestDto.getGender().equals("남") || updateRequestDto.getGender().equals("")) {
             this.gender = Gender.MAN;

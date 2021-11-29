@@ -77,14 +77,14 @@ public class UserService {
         }
     }
 
-    public UserProfileResponseDto getProfile(Long id) {
+    public UserProfileResponseDto getProfile(Long id, Long sessionId) {
 
         User user = userRepository.findById(id).orElseThrow(() -> {
             throw new CustomException("해당 유저가 없습니다");
         });
         logger.info("user : {}", user);
 
-        return new UserProfileResponseDto(user);
+        return new UserProfileResponseDto(user, sessionId);
     }
 
 }
