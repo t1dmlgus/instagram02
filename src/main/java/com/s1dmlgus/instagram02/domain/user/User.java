@@ -53,7 +53,7 @@ public class User extends BaseTimeEntity{
         this.name = name;
     }
 
-    @Builder
+
     public void testUser(String username, String password, String email, String name) {
         this.id = 1L;
         this.username = username;
