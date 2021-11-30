@@ -18,13 +18,16 @@ public class SubscribeService {
     @Transactional
     public ResponseDto<?> subscribe(Long fromUserId, Long toUserId){
 
+        int subscribeCount = 0;
+
         try {
             subscribeRepository.subscribe(fromUserId, toUserId);
+            subscribeCount= subscribeRepository.mSubscribeCount(toUserId);
         } catch (Exception e) {
             throw new CustomApiException("이미 구독한 상태입니다.");
         }
 
-        return new ResponseDto<>("구독하였습니다.", null);
+        return new ResponseDto<>("구독하였습니다.", subscribeCount);
     }
 
     // 구독 취소하기
@@ -32,8 +35,9 @@ public class SubscribeService {
     public ResponseDto<?> unSubscribe(Long fromUserId, Long toUserId){
 
         subscribeRepository.unSubscribe(fromUserId, toUserId);
+        int subscribeCount = subscribeRepository.mSubscribeCount(toUserId);
 
-        return new ResponseDto<>("구독 취소하였습니다.", null);
+        return new ResponseDto<>("구독 취소하였습니다.", subscribeCount);
     }
 
 

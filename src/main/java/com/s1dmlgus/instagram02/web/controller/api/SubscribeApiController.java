@@ -32,7 +32,6 @@ public class SubscribeApiController {
 
         ResponseDto<?> unSubscribe = subscribeService.unSubscribe(principalDetails.getUser().getId(), toUserId);
 
-
         return new ResponseEntity<>(unSubscribe, HttpStatus.OK);
     }
 
