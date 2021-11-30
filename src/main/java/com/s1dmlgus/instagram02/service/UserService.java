@@ -1,5 +1,6 @@
 package com.s1dmlgus.instagram02.service;
 
+import com.s1dmlgus.instagram02.domain.subscribe.SubscribeRepository;
 import com.s1dmlgus.instagram02.domain.user.Role;
 import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.domain.user.UserRepository;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final SubscribeRepository subscribeRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     Logger logger = LoggerFactory.getLogger(UserService.class);
@@ -77,14 +79,40 @@ public class UserService {
         }
     }
 
-    public UserProfileResponseDto getProfile(Long id, Long sessionId) {
+    // 프로필 가져오기
+    @Transactional
+    public UserProfileResponseDto getProfile(Long pageId, Long sessionId) {
 
-        User user = userRepository.findById(id).orElseThrow(() -> {
+        User user = userRepository.findById(pageId).orElseThrow(() -> {
             throw new CustomException("해당 유저가 없습니다");
         });
         logger.info("user : {}", user);
 
-        return new UserProfileResponseDto(user, sessionId);
+        boolean subscribeState = getSubscribeState(pageId, sessionId);
+        boolean pageOwnerState = getPageOwnerState(pageId, sessionId);
+        int subscribeCount = getSubscribeCount(pageId);
+
+
+        return new UserProfileResponseDto(user, pageOwnerState, subscribeState, subscribeCount);
     }
+
+    // 페이지 주인 확인
+    protected boolean getPageOwnerState(Long pageid, Long sessionId) {
+
+        return pageid.equals(sessionId);
+    }
+
+    // 구독 상태 확인
+    protected boolean getSubscribeState(Long pageId, Long sessionId) {
+
+        return  subscribeRepository.mSubscribeState(pageId, sessionId) == 1;
+    }
+
+    // 구독자 수 카운트
+    protected int getSubscribeCount(Long pageId) {
+
+        return subscribeRepository.mSubscribeCount(pageId);
+    }
+
 
 }
