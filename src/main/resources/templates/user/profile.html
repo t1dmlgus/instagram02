@@ -50,7 +50,8 @@
 			<div class="subscribe">
 				<ul>
 					<li><a href=""> 게시물<span th:text="${profileDto.imageCount}">3</span></a></li>
-					<li><a href="javascript:subscribeInfoModalOpen();"> 구독정보<span id="subscribeCount" th:text="${profileDto.subscribeCount}">0</span>
+					<li><a href="javascript:subscribeInfoModalOpen();"> 팔로워<span id="subscribeCount" th:text="${profileDto.subscribeCount}">0</span>
+<!--					<li><a href="javascript:subscribeInfoModalOpen();"> 팔로잉<span id="subscribeCount" th:text="${profileDto.subscribeCount}">0</span>-->
 					</a></li>
 				</ul>
 			</div>
@@ -101,9 +102,9 @@
 		<button onclick="closePopup('.modal-info')">취소</button>
 	</div>
 </div>
-<!--로그아웃, 회원정보변경 모달 end-->
+<!-- 로그아웃, 회원정보변경 모달 end -->
 
-<!--프로필사진 바꾸기 모달-->
+<!-- 프로필사진 바꾸기 모달-->
 <div class="modal-image" onclick="modalImage()">
 	<div class="modal">
 		<p>프로필 사진 바꾸기</p>
@@ -112,8 +113,12 @@
 	</div>
 </div>
 
-<!--프로필사진 바꾸기 모달end-->
+<!-- 프로필사진 바꾸기 모달 end-->
 
+<input type="hidden" id="userId" th:value="${profileDto.userId}">
+
+
+<!-- 구독정보 모달 -->
 <div class="modal-subscribe">
 	<div class="subscribe">
 		<div class="subscribe-header">
@@ -125,34 +130,14 @@
 
 		<div class="subscribe-list" id="subscribeModalList">
 
-			<div class="subscribe__item" id="subscribeModalItem-1">
-				<div class="subscribe__img">
-					<img src="#" onerror="this.src='/images/person.jpeg'"/>
-				</div>
-				<div class="subscribe__text">
-					<h2>love</h2>
-				</div>
-				<div class="subscribe__btn">
-					<button class="cta blue" onclick="toggleSubscribeModal(this)">구독취소</button>
-				</div>
-			</div>
+			<!-- 아이템 -->
 
 
-			<div class="subscribe__item" id="subscribeModalItem-2">
-				<div class="subscribe__img">
-					<img src="#" onerror="this.src='/images/person.jpeg'"/>
-				</div>
-				<div class="subscribe__text">
-					<h2>ssar</h2>
-				</div>
-				<div class="subscribe__btn">
-					<button class="cta blue" onclick="toggleSubscribeModal(this)">구독취소</button>
-				</div>
-			</div>
 		</div>
 	</div>
 
 </div>
+<!-- 구독정보 모달 end-->
 
 
 <script src="/js/profile.js"></script>
