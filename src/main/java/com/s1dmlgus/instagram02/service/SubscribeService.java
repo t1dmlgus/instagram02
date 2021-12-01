@@ -73,6 +73,25 @@ public class SubscribeService {
 
         // qlrm 라이브러리 -> dto에 DB결과를 매핑하기 위해
         JpaResultMapper result = new JpaResultMapper();
-        return result.list(nativeQuery, SubscribeDto.class);
+        List<SubscribeDto> list =result.list(nativeQuery, SubscribeDto.class);
+
+        return list;
     }
+
+
+    // 구독 상태 확인
+    @Transactional(readOnly = true)
+    public boolean getSubscribeState(Long pageId, Long sessionId) {
+
+        return  subscribeRepository.mSubscribeState(pageId, sessionId) == 1;
+    }
+
+    // 구독자 수 카운트
+    @Transactional(readOnly = true)
+    public int getSubscribeCount(Long pageId) {
+
+        return subscribeRepository.mSubscribeCount(pageId);
+    }
+
+
 }

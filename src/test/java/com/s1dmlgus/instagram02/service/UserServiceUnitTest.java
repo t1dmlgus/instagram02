@@ -1,7 +1,6 @@
 package com.s1dmlgus.instagram02.service;
 
 import com.s1dmlgus.instagram02.domain.image.Image;
-import com.s1dmlgus.instagram02.domain.subscribe.SubscribeRepository;
 import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.domain.user.UserRepository;
 import com.s1dmlgus.instagram02.handler.exception.CustomApiException;
@@ -42,7 +41,7 @@ class UserServiceUnitTest {
     @Mock
     private UserRepository userRepository;
     @Mock
-    private SubscribeRepository subscribeRepository;
+    private SubscribeService subscribeService;
 
     @Mock
     private User sessionUser;
@@ -128,8 +127,8 @@ class UserServiceUnitTest {
         //given
         Long pageId = 2L;
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(sessionUser));
-        when(subscribeRepository.mSubscribeState(pageId, sessionUser.getId())).thenReturn(1);
-        when(subscribeRepository.mSubscribeCount(pageId)).thenReturn(1);
+        when(subscribeService.getSubscribeState(pageId, sessionUser.getId())).thenReturn(true);
+        when(subscribeService.getSubscribeCount(pageId)).thenReturn(1);
 
         
         //when
@@ -147,44 +146,12 @@ class UserServiceUnitTest {
         //given
         Long pageId = 1L;
 
-
         //when
         boolean pageOwnerState = userService.getPageOwnerState(pageId, sessionUser.getId());
 
         //then
         assertThat(pageOwnerState).isTrue();
     }
-    
-    @DisplayName("구독 상태 확인 테스트")
-    @Test
-    public void getSubscribeStateTest() throws Exception{
-        //given
-        Long pageId = 1L;
-        when(subscribeRepository.mSubscribeState(pageId, sessionUser.getId())).thenReturn(1);
-
-
-        //when
-        boolean subscribeState = userService.getSubscribeState(pageId, sessionUser.getId());
-
-        //then
-        assertThat(subscribeState).isTrue();
-    }
-
-    @DisplayName("구독자 수 카운트 테스트")
-    @Test
-    public void getSubscribeCountTest() throws Exception{
-        //given
-
-        when(subscribeRepository.mSubscribeCount(sessionUser.getId())).thenReturn(2);
-
-        //when
-        int subscribeCount = userService.getSubscribeCount(sessionUser.getId());
-
-        //then
-        assertThat(subscribeCount).isEqualTo(2);
-    }
-
-
     
     
     // 회원정보수정 DTO

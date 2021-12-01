@@ -1,6 +1,5 @@
 package com.s1dmlgus.instagram02.service;
 
-import com.s1dmlgus.instagram02.domain.subscribe.SubscribeRepository;
 import com.s1dmlgus.instagram02.domain.user.Role;
 import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.domain.user.UserRepository;
@@ -23,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final SubscribeRepository subscribeRepository;
+    private final SubscribeService subscribeService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     Logger logger = LoggerFactory.getLogger(UserService.class);
@@ -88,9 +87,9 @@ public class UserService {
         });
         logger.info("user : {}", user);
 
-        boolean subscribeState = getSubscribeState(pageId, sessionId);
         boolean pageOwnerState = getPageOwnerState(pageId, sessionId);
-        int subscribeCount = getSubscribeCount(pageId);
+        boolean subscribeState = subscribeService.getSubscribeState(pageId, sessionId);
+        int subscribeCount = subscribeService.getSubscribeCount(pageId);
 
 
         return new UserProfileResponseDto(user, pageOwnerState, subscribeState, subscribeCount);
@@ -102,17 +101,6 @@ public class UserService {
         return pageid.equals(sessionId);
     }
 
-    // 구독 상태 확인
-    protected boolean getSubscribeState(Long pageId, Long sessionId) {
-
-        return  subscribeRepository.mSubscribeState(pageId, sessionId) == 1;
-    }
-
-    // 구독자 수 카운트
-    protected int getSubscribeCount(Long pageId) {
-
-        return subscribeRepository.mSubscribeCount(pageId);
-    }
 
 
 }
