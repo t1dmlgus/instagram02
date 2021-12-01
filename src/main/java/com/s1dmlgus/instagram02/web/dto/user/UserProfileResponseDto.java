@@ -15,21 +15,23 @@ public class UserProfileResponseDto {
     private String website;
     private List<Image> images;
     private int imageCount;
+
     private boolean pageOwnerState;
+    private boolean subscribeState;         // 구독 상태
+    private int subscribeCount;             // 구독자 수
 
 
-    public UserProfileResponseDto(User user, Long sessionId) {
+
+    public UserProfileResponseDto(User user, boolean pageOwnerState, boolean subscribeState, int subscribeCount) {
         this.userId = user.getId();
         this.username = user.getName();
         this.bio = user.getBio();
         this.website = user.getWebsite();
         this.images = user.getImages();
         this.imageCount = user.getImages().size();
-
-        if (userId.equals(sessionId)) {
-            pageOwnerState = true;
-        }
-
+        this.pageOwnerState = pageOwnerState;
+        this.subscribeState = subscribeState;
+        this.subscribeCount = subscribeCount;
 
     }
 

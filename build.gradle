@@ -38,7 +38,8 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-aws-context
 	implementation group: 'org.springframework.cloud', name: 'spring-cloud-aws-context', version: '2.2.2.RELEASE'
 
-
+	// QLRM(Query Language Result Mapper)
+	implementation group: 'ch.simas.qlrm', name: 'qlrm', version: '1.7.1'
 
 	asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 

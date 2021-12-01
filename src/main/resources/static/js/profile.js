@@ -11,24 +11,106 @@
  */
 
 // (1) 유저 프로파일 페이지 구독하기, 구독취소
-function toggleSubscribe(obj) {
-	if ($(obj).text() === "구독취소") {
-		$(obj).text("구독하기");
-		$(obj).toggleClass("blue");
+function toggleSubscribe(toUserId, obj) {
+
+    console.log($(obj).text());
+
+	if ($(obj).text() == "구독취소") {
+
+	    $.ajax({
+            type:'delete',
+            url:"/api/subscribe/" +toUserId,
+            dataType:"json"
+
+	    }).done(res=>{
+            $(obj).text("구독하기");
+        	$(obj).toggleClass("blue");
+        	console.log(res);
+        	$('#subscribeCount').html(res.data);
+
+
+	    }).fail(error=>{
+            console.log("구독취소 실패", error);
+	    });
+
 	} else {
-		$(obj).text("구독취소");
-		$(obj).toggleClass("blue");
+
+        $.ajax({
+                type:'post',
+                url:"/api/subscribe/" +toUserId,
+                dataType:"json"
+
+            }).done(res=>{
+                $(obj).text("구독취소");
+                $(obj).toggleClass("blue");
+                console.log(res);
+                $('#subscribeCount').html(res.data);
+
+            }).fail(error=>{
+                console.log("구독하기 실패", error);
+            });
 	}
 }
 
+
+
 // (2) 구독자 정보  모달 보기
 function subscribeInfoModalOpen() {
+
+    var pageId = $("#userId").val();
 	$(".modal-subscribe").css("display", "flex");
+
+    $.ajax({
+         type:'get',
+         url:"/api/subscribe/"+pageId,
+         dataType:"json"
+
+     }).done(res=>{
+          console.log(res);
+
+          res.forEach((u)=>{
+               let item = getSubscribeModalItem(u);
+               $("#subscribeModalList").append(item);
+
+           })
+    }).fail(error=>{
+          console.log("구독정보 불러오기 예외",error);
+
+    });
+
+
 }
 
-function getSubscribeModalItem() {
+function getSubscribeModalItem(u) {
+
+    let item=`
+        <div class="subscribe__item"  id="subscribeModalItem-${u.id}">
+            <div class="subscribe__img">
+                <img src="/upload/${u.profileImageUrl}" onerror="this.src='/images/person.jpeg'"/>
+            </div>
+            <div class="subscribe__text">
+                <h2>${u.username}</h2>
+            </div>
+            <div class="subscribe__btn">`;
+
+            if(!u.iam){      // 동일 유저가 아닐 때, 버튼이 만들어져야 한다.
+                if(u.follow){   // 구독한 상태
+                        item += `<button class="cta blue" onclick="toggleSubscribe(${u.id}, this)">구독취소</button>`;
+                }else{                       // 구독안한 상태
+                        item +=`<button class="cta" onclick="toggleSubscribe(${u.id}, this)">구독하기</button>`;
+                }
+            }
+             item +=`
+            </div>
+        </div>`;
+
+    return item;
 
 }
+
+
+
+
 
 
 // (3) 구독자 정보 모달에서 구독하기, 구독취소

@@ -8,7 +8,7 @@ import com.s1dmlgus.instagram02.web.dto.ResponseDto;
 import com.s1dmlgus.instagram02.web.dto.auth.JoinRequestDto;
 import com.s1dmlgus.instagram02.web.dto.user.UserProfileResponseDto;
 import com.s1dmlgus.instagram02.web.dto.user.UserUpdateRequestDto;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,9 +20,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
@@ -38,7 +40,17 @@ class UserServiceUnitTest {
     private UserService userService;
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private SubscribeService subscribeService;
 
+    @Mock
+    private User sessionUser;
+
+    @BeforeEach
+    public void setUp(){
+
+        sessionUser = testUser();
+    }
 
     @Spy
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -47,8 +59,8 @@ class UserServiceUnitTest {
     @Test
     public void duplicateUsernameTest() throws Exception {
         //given
-        User user1 = testUser();
-        User user2 = testUser();
+        User user1 = sessionUser;
+        User user2 = sessionUser;
         when(userRepository.existsByUsername(user1.getUsername())).thenReturn(true);
 
         //when
@@ -65,13 +77,13 @@ class UserServiceUnitTest {
     @Test
     public void bcryptPwTest() throws Exception {
         //given
-        User user = testUser();
+
 
         //when
-        userService.bcryptPw(user);
+        userService.bcryptPw(sessionUser);
 
         //then
-        assertThat(user.getPassword()).isNotEqualTo("1234");
+        assertThat(sessionUser.getPassword()).isNotEqualTo("1234");
 
     }
 
@@ -113,16 +125,32 @@ class UserServiceUnitTest {
     @Test
     public void getProfileTest() throws Exception{
         //given
-        Long userId = 1L;
-        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(createProfile()));
+        Long pageId = 2L;
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(sessionUser));
+        when(subscribeService.getSubscribeState(pageId, sessionUser.getId())).thenReturn(true);
+        when(subscribeService.getSubscribeCount(pageId)).thenReturn(1);
 
+        
         //when
-        UserProfileResponseDto profile = userService.getProfile(userId, 1L);
+        UserProfileResponseDto profile = userService.getProfile(pageId, sessionUser.getId());
         logger.info("profile : {}", profile);
 
         //then
-        Assertions.assertThat(profile.getImages().get(0).getCaption()).isEqualTo("테스트이미지");
+        assertThat(profile.getUsername()).isEqualTo("테스트의현");
+  
+    }
+    
+    @DisplayName("로그인 유저가 해당 페이지 주인인지 확인 테스트")
+    @Test
+    public void getPageOwnerStateTest() throws Exception{
+        //given
+        Long pageId = 1L;
 
+        //when
+        boolean pageOwnerState = userService.getPageOwnerState(pageId, sessionUser.getId());
+
+        //then
+        assertThat(pageOwnerState).isTrue();
     }
     
     
@@ -165,15 +193,14 @@ class UserServiceUnitTest {
     // 프로필dto 주입
     private User createProfile(){
 
-        User testUser = testUser();
         Image image = Image.builder()
                 .caption("테스트이미지")
                 .postImageUrl("테스트명.jpg")
-                .user(testUser)
+                .user(sessionUser)
                 .build();
-        testUser.getImages().add(image);
+        sessionUser.getImages().add(image);
 
-        return testUser;
+        return sessionUser;
 
     }
 
