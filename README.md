@@ -28,7 +28,10 @@
 ---
 <br>
 
-# 3. 프로젝트  아키텍처
+# 3. 프로젝트 아키텍처
+
+
+![프로젝트 아키텍터01](https://user-images.githubusercontent.com/59961350/144152453-5f732099-8dd4-4bd9-a285-6ec3385b0ef5.PNG)
 
 ---
 <br>
