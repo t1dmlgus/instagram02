@@ -183,7 +183,7 @@ class UserServiceUnitTest {
     private User testUser() {
 
         User user = new User();
-        user.testUser("test1Dmlgus", "1234", "dmlgus@gmail.com", "테스트의현");
+        user.testUser();
 
         return user;
     }

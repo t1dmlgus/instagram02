@@ -1,4 +1,4 @@
-package com.s1dmlgus.instagram02.web.dto.image;
+package com.s1dmlgus.instagram02.web.dto.image.upload;
 
 import com.s1dmlgus.instagram02.domain.image.Image;
 import com.s1dmlgus.instagram02.domain.user.User;
@@ -16,7 +16,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ImageUploadDto {
+public class ImageUploadRequestDto {
 
     private String userId;
     @NotBlank(message = "타이틀을 입력해주세요.")
