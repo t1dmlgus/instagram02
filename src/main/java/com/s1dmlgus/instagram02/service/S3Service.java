@@ -10,7 +10,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
 import com.s1dmlgus.instagram02.handler.exception.CustomApiException;
-import com.s1dmlgus.instagram02.web.dto.image.ImageUploadDto;
+import com.s1dmlgus.instagram02.web.dto.image.upload.ImageUploadRequestDto;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -50,14 +50,14 @@ public class S3Service {
 
     // s3 업로드
     @Transactional
-    public void upload(ImageUploadDto imageUploadDto, String fileName){
+    public void upload(ImageUploadRequestDto imageUploadRequestDto, String fileName){
 
         try {
             ObjectMetadata objMeta = new ObjectMetadata();
-            byte[] bytes = IOUtils.toByteArray(imageUploadDto.getFile().getInputStream());
+            byte[] bytes = IOUtils.toByteArray(imageUploadRequestDto.getFile().getInputStream());
             objMeta.setContentLength(bytes.length);
 
-            s3Client.putObject(new PutObjectRequest(bucket, fileName, imageUploadDto.getFile().getInputStream(), objMeta)
+            s3Client.putObject(new PutObjectRequest(bucket, fileName, imageUploadRequestDto.getFile().getInputStream(), objMeta)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (Exception e) {
             //e.printStackTrace();

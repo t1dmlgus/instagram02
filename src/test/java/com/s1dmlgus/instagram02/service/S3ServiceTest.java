@@ -1,6 +1,6 @@
 package com.s1dmlgus.instagram02.service;
 
-import com.s1dmlgus.instagram02.web.dto.image.ImageUploadDto;
+import com.s1dmlgus.instagram02.web.dto.image.upload.ImageUploadRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,13 +27,13 @@ class S3ServiceTest {
     public void failS3UploadTest() throws Exception{
         //given
         MockMultipartFile file = new MockMultipartFile("테스트파일", "테스트파일명.jpeg", "image/jpeg", "<<테스트파일>>".getBytes());
-        ImageUploadDto imageUploadDto = new ImageUploadDto("1L", "이미지업로드테스트입니다", file);
+        ImageUploadRequestDto imageUploadRequestDto = new ImageUploadRequestDto("1L", "이미지업로드테스트입니다", file);
         String fileName = "uuid_테스트명";
 
         //when
 
         //then
-        assertThatThrownBy(() -> s3Service.upload(imageUploadDto, fileName))
+        assertThatThrownBy(() -> s3Service.upload(imageUploadRequestDto, fileName))
                 .isInstanceOf(Exception.class)
                 .hasMessage("s3 이미지 업로드에 실패하였습니다.");
 
