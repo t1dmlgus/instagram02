@@ -41,14 +41,14 @@
     * 개발 환경 구축
     * 도메인 설계
     * Spring Rest Docs API 문서화
-    * 유저 API 구현
+    * 유저 API 구현(회원가입, 회원수정, 회원정보 조회)
     * 회원가입 시 유효성 검사(AOP)
     * 글로벌 예외 핸들러 구현
     * 로그인 구현(UsernamePasswordAuthenticationToken, OAuth 2.0)
     * EC2 배포, RDS 연동
 * v0.1.2
     * 로거 추가
-    * 이미지 API 구현
+    * 이미지 API 구현(이미지 업로드)
     * 이미지 업로드(로컬)
     * 프로필 페이지 회원정보 및 이미지 렌더링
 * v0.1.3
@@ -56,15 +56,16 @@
     * S3, cloudFront 연동
     * 테스트, 빌드, 배포 자동화
 * v0.1.4
-    * 구독 API 구현
+    * 구독 API 구현(구독하기, 구독취소, 구독유저 조회)
     * 구독 버튼 활성화
+    * 이미지 API 구현(스토리 조회)
     
 ---
 <br>
 
 # 5. Info
-- [서비스(배포)](http://ec2-3-36-197-4.ap-northeast-2.compute.amazonaws.com:8080)
-- [프로젝트 문서](https://github.com/t1dmlgus/instagram02/wiki)
+- [서비스 바로가기](http://ec2-3-36-197-4.ap-northeast-2.compute.amazonaws.com:8080)
+- [프로젝트 문서 바로가기](https://github.com/t1dmlgus/instagram02/wiki)
 - [InstagramProject version01 바로가기](https://github.com/t1dmlgus/instagram03)
 - dmlgusgngl@gmail.com
 
