@@ -31,8 +31,6 @@ public class UserApiController {
             principalDetails.setUser((User) updateUser.getData());
         }
 
-
-
         return new ResponseEntity<>(updateUser, HttpStatus.OK);
     }
 
