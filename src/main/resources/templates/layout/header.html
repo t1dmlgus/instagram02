@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:fragment="head(title)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,7 +33,7 @@
             </a>
 
             <!-- 세션유저 js 활용-->
-<!--            <input type="hidden" id = "t1" var="tt" sec:authentication="principal.user.name">-->
+            <input type="hidden" id ="sessionId" th:value="${principal.id}">
 
             <!-- nav -->
             <nav class="navi">
@@ -49,7 +49,7 @@
                         </a>
                     </li>
                     <li class="navi-item">
-                        <a href="/user/1">
+                        <a th:href="|/user/${principal.id}|">
                             <i class="far fa-user"></i>
                         </a>
                     </li>

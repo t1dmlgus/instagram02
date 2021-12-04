@@ -7,6 +7,10 @@
 	(5) 댓글삭제
  */
 
+var sessionId = $("#sessionId").val();
+console.log(sessionId);
+
+
 // (1) 스토리 로드하기
 function storyLoad() {
 
@@ -44,7 +48,7 @@ function getStoryItem(image) {
                         <img class="profile-image" src="${image.postImageUrl}"
                              onerror="this.src='/images/person.jpeg'" />
                     </div>
-                    <div>${image.username}</div>
+                    <a href="/user/${image.userId}">${image.username}</a>
                 </div>
 
                 <div class="sl__item__img">

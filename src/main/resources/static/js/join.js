@@ -27,7 +27,7 @@ function join(evt) {
 
     $.ajax({
         type:"POST",
-        url:"/api/auth/signup",
+        url:"/api/user/join",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
         dataType:"json"

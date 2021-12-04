@@ -3,7 +3,7 @@ package com.s1dmlgus.instagram02.web.controller;
 
 import com.s1dmlgus.instagram02.config.auth.PrincipalDetails;
 import com.s1dmlgus.instagram02.service.UserService;
-import com.s1dmlgus.instagram02.web.dto.user.UserProfileResponseDto;
+import com.s1dmlgus.instagram02.web.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,20 +25,28 @@ public class UserController {
     private final UserService userService;
 
 
+    // 회원가입
+    @GetMapping("/join")
+    public String join(){
+        return "user/join";
+    }
+
+    // 회원정보 조회
     @GetMapping("/{id}")
     public String profile(@PathVariable Long id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        UserProfileResponseDto profileDto = userService.getProfile(id, principalDetails.getUser().getId());
+        ResponseDto<?> profile = userService.profile(id, principalDetails);
+        logger.info("profile : {}",profile);
+        
+        model.addAttribute("principal", principalDetails.getUser());
+        model.addAttribute("profileDto", profile.getData());
 
-        logger.info("profileDto : {}", profileDto);
-
-        model.addAttribute("profileDto", profileDto);
-        //model.addAttribute("principal", principalDetails);
         return "user/profile";
     }
 
-    @GetMapping("/update/{id}")
-    public String update(@PathVariable int id, @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
+    // 회원 수정
+    @GetMapping("/update")
+    public String update(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
 
         model.addAttribute("principal", principalDetails.getUser());
 
