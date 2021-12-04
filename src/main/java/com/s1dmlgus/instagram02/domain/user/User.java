@@ -46,20 +46,17 @@ public class User extends BaseTimeEntity{
     private List<Image> images = new ArrayList<Image>();
 
     @Builder
-    public User(String username, String password, String email, String name) {
+    public User(Long id, String username, String password, String email, String name, String bio, String website, String phone, String profileImageUrl) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
         this.name = name;
-    }
+        this.bio = bio;
+        this.website = website;
+        this.phone = phone;
+        this.profileImageUrl = profileImageUrl;
 
-
-    public void testUser() {
-        this.id = 1L;
-        this.username = "tsetDmlgus";
-        this.password = "1234";
-        this.email = "dmlgusgngl@gmail.com";
-        this.name = "테스트의현";
     }
 
 
@@ -73,14 +70,6 @@ public class User extends BaseTimeEntity{
     }
 
 
-    @Builder
-    public User(String username, String password, String email, String name, Role role) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.name = name;
-        this.role = role;
-    }
 
     // 프로필 업데이트
     public void updateUserProfile(UserUpdateRequestDto updateRequestDto) {
