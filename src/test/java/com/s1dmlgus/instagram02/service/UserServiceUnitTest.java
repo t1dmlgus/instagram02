@@ -1,12 +1,11 @@
 package com.s1dmlgus.instagram02.service;
 
-import com.s1dmlgus.instagram02.domain.image.Image;
+import com.s1dmlgus.instagram02.config.auth.PrincipalDetails;
 import com.s1dmlgus.instagram02.domain.user.User;
 import com.s1dmlgus.instagram02.domain.user.UserRepository;
 import com.s1dmlgus.instagram02.handler.exception.CustomApiException;
 import com.s1dmlgus.instagram02.web.dto.ResponseDto;
 import com.s1dmlgus.instagram02.web.dto.auth.JoinRequestDto;
-import com.s1dmlgus.instagram02.web.dto.user.UserProfileResponseDto;
 import com.s1dmlgus.instagram02.web.dto.user.UserUpdateRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -43,13 +42,18 @@ class UserServiceUnitTest {
     @Mock
     private SubscribeService subscribeService;
 
-    @Mock
-    private User sessionUser;
+    private User user;
 
     @BeforeEach
     public void setUp(){
 
-        sessionUser = testUser();
+        user = User.builder()
+                .id(1L)
+                .username("testID")
+                .password("1234")
+                .email("test@gmail.com")
+                .name("이의현")
+                .build();
     }
 
     @Spy
@@ -59,8 +63,14 @@ class UserServiceUnitTest {
     @Test
     public void duplicateUsernameTest() throws Exception {
         //given
-        User user1 = sessionUser;
-        User user2 = sessionUser;
+        User user1 = User.builder()
+                .username("테스트1")
+                .build();
+        User user2 = User.builder()
+                .username("테스트1")
+                .build();
+
+
         when(userRepository.existsByUsername(user1.getUsername())).thenReturn(true);
 
         //when
@@ -73,17 +83,16 @@ class UserServiceUnitTest {
     }
 
 
-    @DisplayName("비밀번호 암호화 테슽")
+    @DisplayName("비밀번호 암호화 테스트")
     @Test
     public void bcryptPwTest() throws Exception {
         //given
 
-
         //when
-        userService.bcryptPw(sessionUser);
+        userService.bcryptPw(user);
 
         //then
-        assertThat(sessionUser.getPassword()).isNotEqualTo("1234");
+        assertThat(user.getPassword()).isNotEqualTo("1234");
 
     }
 
@@ -113,30 +122,31 @@ class UserServiceUnitTest {
         when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
         //when
-        ResponseDto<?> update = userService.update(1L, createUpdateRequestDto());
-        
+        ResponseDto<?> update = userService.update(createUpdateRequestDto(), new PrincipalDetails(user));
+
         //then
         assertThat(update.getMessage()).isEqualTo("회원 수정이 완료되었습니다.");
-        
+
     }
 
     
-    @DisplayName("프로필정보 가져오기 테스트")
+    @DisplayName("회원정보 가져오기 테스트")
     @Test
     public void getProfileTest() throws Exception{
         //given
+        Long sessionId = user.getId();
         Long pageId = 2L;
-        when(userRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(sessionUser));
-        when(subscribeService.getSubscribeState(pageId, sessionUser.getId())).thenReturn(true);
+        doReturn(Optional.ofNullable(user)).when(userRepository).findById(pageId);
+        when(subscribeService.getSubscribeState(pageId, sessionId)).thenReturn(true);
         when(subscribeService.getSubscribeCount(pageId)).thenReturn(1);
 
         
         //when
-        UserProfileResponseDto profile = userService.getProfile(pageId, sessionUser.getId());
+        ResponseDto<?> profile = userService.profile(pageId, new PrincipalDetails(user));
         logger.info("profile : {}", profile);
 
         //then
-        assertThat(profile.getUsername()).isEqualTo("테스트의현");
+        assertThat(profile.getMessage()).isEqualTo("회원 정보를 조회합니다.");
   
     }
     
@@ -147,7 +157,7 @@ class UserServiceUnitTest {
         Long pageId = 1L;
 
         //when
-        boolean pageOwnerState = userService.getPageOwnerState(pageId, sessionUser.getId());
+        boolean pageOwnerState = userService.getPageOwnerState(pageId, user.getId());
 
         //then
         assertThat(pageOwnerState).isTrue();
@@ -178,30 +188,5 @@ class UserServiceUnitTest {
         return joinRequestDto1;
     }
 
-
-    // 유저생성 Entity
-    private User testUser() {
-
-        User user = new User();
-        user.testUser();
-
-        return user;
-    }
-
-
-
-    // 프로필dto 주입
-    private User createProfile(){
-
-        Image image = Image.builder()
-                .caption("테스트이미지")
-                .postImageUrl("테스트명.jpg")
-                .user(sessionUser)
-                .build();
-        sessionUser.getImages().add(image);
-
-        return sessionUser;
-
-    }
 
 }

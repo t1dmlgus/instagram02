@@ -23,6 +23,7 @@ public class AuthApiController {
 
     private final UserService userService;
 
+    // 로그인
     @PostMapping("/signup")
     public ResponseEntity<?> join(@Valid @RequestBody JoinRequestDto joinRequestDto, BindingResult bindingResult) {
 

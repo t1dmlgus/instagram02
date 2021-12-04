@@ -1,4 +1,4 @@
-package com.s1dmlgus.instagram02.web.dto.user;
+package com.s1dmlgus.instagram02.web.dto.user.profile;
 
 
 import com.s1dmlgus.instagram02.domain.image.Image;
@@ -24,7 +24,7 @@ public class UserProfileResponseDto {
 
     public UserProfileResponseDto(User user, boolean pageOwnerState, boolean subscribeState, int subscribeCount) {
         this.userId = user.getId();
-        this.username = user.getName();
+        this.username = user.getUsername();
         this.bio = user.getBio();
         this.website = user.getWebsite();
         this.images = user.getImages();

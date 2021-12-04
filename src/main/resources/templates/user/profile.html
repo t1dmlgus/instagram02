@@ -42,9 +42,11 @@
 					</div>
 				</div>
 
-				<button class="modi" onclick="popup('.modal-info')">
-					<i class="fas fa-cog"></i>
-				</button>
+				<div th:if="${profileDto.pageOwnerState}">
+					<button class="modi" onclick="popup('.modal-info')">
+						<i class="fas fa-cog"></i>
+					</button>
+				</div>
 			</div>
 
 			<div class="subscribe">
@@ -56,10 +58,9 @@
 				</ul>
 			</div>
 			<div class="state">
-				<span th:text="${#strings.equals(profileDto.bio, null)} ?  '' : ${profileDto.bio}"></span>
-				<a th:href="${#strings.equals(profileDto.website, null)} ?  '' : ${profileDto.website}">
-					<div th:text="${#strings.equals(profileDto.website, null)} ?  '' : ${profileDto.website}"></div>
-				</a>
+				<div th:text="${#strings.equals(profileDto.bio, null)} ?  '' : ${profileDto.bio}"></div>
+				<a th:href="${profileDto.website}" th:text="${profileDto.website}"></a>
+
 			</div>
 		</div>
 		<!--유저정보 및 사진등록 구독하기-->
@@ -97,7 +98,7 @@
 <!--로그아웃, 회원정보변경 모달-->
 <div class="modal-info" onclick="modalInfo()">
 	<div class="modal">
-		<button onclick="location.href='/user/update/1'">회원정보 변경</button>
+		<button th:onclick="|location.href='/user/update'|">회원정보 변경</button>
 		<button onclick="location.href='/logout'">로그아웃</button>
 		<button onclick="closePopup('.modal-info')">취소</button>
 	</div>

@@ -33,7 +33,7 @@ public class ImageApiController {
     private final ImageService imageService;
 
 
-    // 스토리
+    // 스토리 가져오기
     @GetMapping()
     public ResponseEntity<?> story(@AuthenticationPrincipal PrincipalDetails principalDetails){
 

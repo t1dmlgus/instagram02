@@ -31,7 +31,7 @@ function update(userId, evt) {
 
     $.ajax({
         type:"put",
-        url:`/api/user/update/${userId}`,
+        url:`/api/user/update`,
         data: JSON.stringify(data),
         contentType:'application/json; charset=utf-8',
         dataType:'json'

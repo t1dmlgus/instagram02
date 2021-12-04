@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +17,8 @@ public class ImageStoryResponseDto {
     private Long imageId;
     private String caption;
     private String postImageUrl;
+    private Long userId;
     private String username;
-    private LocalDateTime createdDate;
     private int likeCount;
     private boolean likeState;
 
@@ -27,9 +26,9 @@ public class ImageStoryResponseDto {
     public ImageStoryResponseDto(Image uploadImage, int likeCount) {
 
         this.imageId = uploadImage.getId();
-        this.createdDate = uploadImage.getCreatedDate();
         this.caption = uploadImage.getCaption();
         this.postImageUrl = uploadImage.getPostImageUrl();
+        this.userId = uploadImage.getUser().getId();
         this.username = uploadImage.getUser().getUsername();
 
 

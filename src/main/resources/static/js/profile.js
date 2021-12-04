@@ -10,6 +10,7 @@
   (8) 구독자 정보 모달 닫기
  */
 
+
 // (1) 유저 프로파일 페이지 구독하기, 구독취소
 function toggleSubscribe(toUserId, obj) {
 
@@ -89,7 +90,9 @@ function getSubscribeModalItem(u) {
                 <img src="/upload/${u.profileImageUrl}" onerror="this.src='/images/person.jpeg'"/>
             </div>
             <div class="subscribe__text">
-                <h2>${u.username}</h2>
+                <a href="/user/${u.id}">
+                    <h2>${u.username}</h2>
+                </a>
             </div>
             <div class="subscribe__btn">`;
 
