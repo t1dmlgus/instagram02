@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,9 +18,9 @@ public class JoinResponseDto {
     private Long userId;
     private String username;
     private String email;
-
     private String name;
     private Role role;
+    private LocalDateTime creaDateTime;
 
 
     public JoinResponseDto(User saveUser) {
@@ -27,5 +29,6 @@ public class JoinResponseDto {
         this.email = saveUser.getEmail();
         this.name = saveUser.getName();
         this.role = saveUser.getRole();
+        this.creaDateTime = LocalDateTime.now();
     }
 }

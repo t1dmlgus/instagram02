@@ -1,8 +1,6 @@
 package com.s1dmlgus.instagram02.web.dto.user;
 
 
-import com.s1dmlgus.instagram02.domain.user.Gender;
-import com.s1dmlgus.instagram02.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
