@@ -19,7 +19,7 @@ public class ImageController {
     @GetMapping("/")
     public String index(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
 
-        model.addAttribute("principal", principalDetails);
+        model.addAttribute("principal", principalDetails.getUser());
         return "image/story";
     }
 

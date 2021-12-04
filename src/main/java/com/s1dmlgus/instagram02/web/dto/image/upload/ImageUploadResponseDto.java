@@ -25,7 +25,7 @@ public class ImageUploadResponseDto {
     public ImageUploadResponseDto(Image afterUploadImage) {
 
         this.imageId = afterUploadImage.getId();
-        this.createdDate = afterUploadImage.getCreatedDate();
+        this.createdDate = LocalDateTime.now();
         this.caption = afterUploadImage.getCaption();
         this.postImageUrl = afterUploadImage.getPostImageUrl();
         this.username = afterUploadImage.getUser().getUsername();

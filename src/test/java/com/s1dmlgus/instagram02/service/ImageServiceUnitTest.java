@@ -53,10 +53,15 @@ class ImageServiceUnitTest {
 
     @BeforeEach
     public void setUp(){
-        user = new User();
-        user.testUser();
 
         ReflectionTestUtils.setField(imageService, "uploadFolder", "C:/workspace/springbootwork/upload/");
+
+        user = User.builder()
+                .id(1L)
+                .username("testID")
+                .email("test@gmail.com")
+                .name("이의현")
+                .build();
     }
 
 
@@ -69,9 +74,11 @@ class ImageServiceUnitTest {
         MockMultipartFile file = new MockMultipartFile("테스트파일", "테스트파일명.jpeg", "image/jpeg", "<<테스트파일>>".getBytes());
         ImageUploadRequestDto imageUploadRequestDto = new ImageUploadRequestDto("1L", "이미지업로드테스트입니다", file);
 
+
         when(imageService.createFile(imageUploadRequestDto)).thenReturn("uuid_테스트명");
         doNothing().when(s3Service).upload(any(), eq("uuid_테스트명"));
-        doReturn(new Image(1L, "이미지업로드테스트입니다", "https://d3r3itann8ixvx.cloudfront.net/uuid_테스트명", user)).when(imageRepository).save(any());
+        doReturn(new Image(1L, "이미지업로드테스트입니다", "https://d3r3itann8ixvx.cloudfront.net/uuid_테스트명", user))
+                .when(imageRepository).save(any());
         
         //when
         ResponseDto<?> upload = imageService.upload(imageUploadRequestDto, new PrincipalDetails(user));
@@ -80,7 +87,7 @@ class ImageServiceUnitTest {
 
         //then
         assertThat(upload.getMessage()).isEqualTo("이미지가 업로드 되었습니다.");
-        
+
     }
 
     
